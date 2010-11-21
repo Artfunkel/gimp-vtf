@@ -1,0 +1,110 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{188F7831-256A-4AAC-BC31-76D2049CC362}</ProjectGuid>
+    <RootNamespace>gimpvtf</RootNamespace>
+    <ProjectName>file-vtf</ProjectName>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <OutDir>$(SolutionDir)bin\</OutDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <OutDir>$(SolutionDir)bin\</OutDir>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <AdditionalIncludeDirectories>C:\Users\Tom\Documents\Visual Studio 2010\Projects\VTFLib\lib;C:\gimp-2.6.11;C:\gtk+-2.22.0\include\glib-2.0;C:\gtk+-2.22.0\lib\glib-2.0\include;C:\gtk+-2.22.0\include;C:\gtk+-2.22.0\include\gtk-2.0;C:\gtk+-2.22.0\include\cairo;C:\gtk+-2.22.0\include\pango-1.0;C:\gtk+-2.22.0\lib\gtk-2.0\include;C:\gtk+-2.22.0\include\gdk-pixbuf-2.0;C:\gtk+-2.22.0\include\atk-1.0</AdditionalIncludeDirectories>
+      <CompileAs>CompileAsC</CompileAs>
+      <PreprocessorDefinitions>_MBCS;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
+    </ClCompile>
+    <Link>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <SubSystem>Windows</SubSystem>
+      <AdditionalLibraryDirectories>C:/Users/Tom/Documents/Visual Studio 2010/Projects/VTFLib/lib/x86/</AdditionalLibraryDirectories>
+    </Link>
+    <PostBuildEvent>
+      <Command>copy "$(TargetPath)" C:\Users\Tom\.gimp-2.6\plug-ins</Command>
+    </PostBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <AdditionalIncludeDirectories>C:\Users\Tom\Documents\Visual Studio 2010\Projects\VTFLib\lib;C:\gimp-2.6.11;C:\gtk+-2.22.0\include\glib-2.0;C:\gtk+-2.22.0\lib\glib-2.0\include;C:\gtk+-2.22.0\include;C:\gtk+-2.22.0\include\gtk-2.0;C:\gtk+-2.22.0\include\cairo;C:\gtk+-2.22.0\include\pango-1.0;C:\gtk+-2.22.0\lib\gtk-2.0\include;C:\gtk+-2.22.0\include\gdk-pixbuf-2.0;C:\gtk+-2.22.0\include\atk-1.0</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>_MBCS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+    </ClCompile>
+    <Link>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <SubSystem>Windows</SubSystem>
+      <AdditionalLibraryDirectories>C:/Users/Tom/Documents/Visual Studio 2010/Projects/VTFLib/lib/x86/</AdditionalLibraryDirectories>
+    </Link>
+    <PostBuildEvent>
+      <Command>copy "$(TargetPath)" C:\Users\Tom\.gimp-2.6\plug-ins\</Command>
+    </PostBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="file-vtf-load.c" />
+    <ClCompile Include="file-vtf.c" />
+    <ClCompile Include="file-vtf-save.c" />
+  </ItemGroup>
+  <ItemGroup>
+    <Library Include="..\..\VTFLib\lib\x86\VTFLib.lib" />
+    <Library Include="..\libs\intl.lib" />
+    <Library Include="..\libs\libgimp-2.0-0.lib" />
+    <Library Include="..\libs\libgimpbase-2.0-0.lib" />
+    <Library Include="..\libs\libgimpui-2.0-0.lib" />
+    <Library Include="..\libs\libgimpwidgets-2.0-0.lib" />
+    <Library Include="..\libs\libglib-2.0-0.lib" />
+    <Library Include="..\libs\libgobject-2.0-0.lib" />
+    <Library Include="..\libs\libgtk-win32-2.0-0.lib" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="file-vtf.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="file-vtf.rc" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

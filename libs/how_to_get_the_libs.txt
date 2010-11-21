@@ -1,0 +1,20 @@
+You don't need to build GIMP to get .lib files. Just grab the .def files from the source package, put them in the same folder as the compiled DLLs, then open the Visual Studio Command Prompt and run this command:
+
+lib /def:libwhatever.def /out:libwhatever.lib /machine:x86
+
+To build gimp-vtf you will need:
+
+intl
+libgimp-2.0-0
+libgimpbase-2.0-0
+libgimpui-2.0-0
+libgimpwidgets-2.0-0
+libglib-2.0-0
+libgobject-2.0-0
+libgtk-win32-2.0-0
+
+While I'm here, you will also need these packages to compile:
+
+ftp://ftp.gimp.org/pub/gimp/v2.6/
+ftp://ftp.gnome.org/pub/gnome/binaries/win32/gtk+/2.22/ (go for the bundle)
+http://nemesis.thewavelength.net/index.php?p=40
