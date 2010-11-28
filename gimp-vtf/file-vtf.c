@@ -120,7 +120,7 @@ static void run(const gchar* name, gint nparams, const GimpParam* param, gint* n
 {
 	INIT_I18N ();
 	
-	*nreturn_vals = 1;
+	*nreturn_vals = 2;
 	*return_vals  = vtf_ret_values;
 	vtf_ret_values[0].type              = GIMP_PDB_STATUS;
 	vtf_ret_values[0].data.d_status     = GIMP_PDB_EXECUTION_ERROR;

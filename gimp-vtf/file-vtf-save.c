@@ -150,17 +150,14 @@ void save(gint nparams, const GimpParam* param, gint* nreturn_vals)
 		layer_iterator = &dummy;
 		break;
 	case VTF_ANIMATION:
-		frame = 0;
 		layer_iterator = &frame;
 		progress_frame_label = "animation frame";
 		break;
 	case VTF_ENVMAP:
-		face = 0;
 		layer_iterator = &face;
 		progress_frame_label = "environment map face";
 		break;
 	case VTF_VOLUME:
-		slice = 0;
 		layer_iterator = &slice;
 		progress_frame_label = "volumetric slice";
 		break;
@@ -183,7 +180,7 @@ void save(gint nparams, const GimpParam* param, gint* nreturn_vals)
 #endif
 
 	// the layer iterator pointer increments either the frame, face or slice value (or a dummy in the case of VTF_MERGE_VISIBLE)
-	for ( ; *layer_iterator < (guint)layers_to_export; (*layer_iterator)++)
+	for ( *layer_iterator = 0; *layer_iterator < (guint)layers_to_export; (*layer_iterator)++)
 	{
 		GimpPixelRgn	pixel_rgn;
 		GimpDrawable*	drawable;
@@ -222,7 +219,6 @@ void save(gint nparams, const GimpParam* param, gint* nreturn_vals)
 
 		if (drawable->bpp != 4)
 		{
-			*nreturn_vals = 2;
 			vtf_ret_values[1].type          = GIMP_PDB_STRING;
 			vtf_ret_values[1].data.d_string = "Internal error: image was not 4bpp";
 			return;
@@ -261,7 +257,6 @@ void save(gint nparams, const GimpParam* param, gint* nreturn_vals)
 	// Failed!
 	if ( vtf_ret_values[0].data.d_status != GIMP_PDB_SUCCESS )
 	{
-      *nreturn_vals = 2;
       vtf_ret_values[1].type          = GIMP_PDB_STRING;
       vtf_ret_values[1].data.d_string = (gchar*)vlGetLastError();
 	}
@@ -330,7 +325,7 @@ static void change_frame_use(GtkWidget* combo, gpointer user_data)
 
 static gboolean alpha_channel_suitable(gint32 image_id, gint32 drawable_id, gpointer user_data)
 {
-	return image_id == *(gint32*)user_data;
+	return num_layers > 1 && image_id == *(gint32*)user_data;
 	/*return ( !gimp_drawable_has_alpha(drawable_id)
 		&& gimp_drawable_height(drawable_id) == gimp_image_height(image_id)
 		&& gimp_drawable_width(drawable_id) == gimp_image_width(image_id) );*/

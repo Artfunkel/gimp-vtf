@@ -1,4 +1,4 @@
-     GIMP VTF PLUG-IN 1.0
+    GIMP VTF PLUG-IN 1.0.1
 Tom Edwards, 21st November 2010
 *******************************
 
@@ -12,3 +12,16 @@ your main GIMP installation. This is at
 
 To get the latest version of the plugin and download 
 source code, visit <http://code.google.com/p/gimp-vtf/>.
+
+Changes
+*******
+
+1.0.1
+ * Fixed save failure when using the only layer in the
+   image as the alpha channel (can no longer do this)
+ * Fixed error messages not making it from the file loader
+   to GIMP
+ * Sorted format list so that all the DXTs are at the top
+ * Corrected alpha bit depth for RGBA16161616(F)
+ * Code elegance, and fixed VS post-build event for users
+   not called Tom

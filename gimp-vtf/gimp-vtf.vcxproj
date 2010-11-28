@@ -58,7 +58,7 @@
       <AdditionalLibraryDirectories>C:/Users/Tom/Documents/Visual Studio 2010/Projects/VTFLib/lib/x86/</AdditionalLibraryDirectories>
     </Link>
     <PostBuildEvent>
-      <Command>copy "$(TargetPath)" C:\Users\Tom\.gimp-2.6\plug-ins</Command>
+      <Command>copy "$(TargetPath)" "$(USERPROFILE)\.gimp-2.6\plug-ins\"</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -79,7 +79,7 @@
       <AdditionalLibraryDirectories>C:/Users/Tom/Documents/Visual Studio 2010/Projects/VTFLib/lib/x86/</AdditionalLibraryDirectories>
     </Link>
     <PostBuildEvent>
-      <Command>copy "$(TargetPath)" C:\Users\Tom\.gimp-2.6\plug-ins\</Command>
+      <Command>copy "$(TargetPath)" "$(USERPROFILE)\.gimp-2.6\plug-ins\"</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
@@ -88,15 +88,15 @@
     <ClCompile Include="file-vtf-save.c" />
   </ItemGroup>
   <ItemGroup>
+    <Library Include="C:\gtk+-2.22.0\lib\glib-2.0.lib" />
+    <Library Include="C:\gtk+-2.22.0\lib\gobject-2.0.lib" />
+    <Library Include="C:\gtk+-2.22.0\lib\gtk-win32-2.0.lib" />
     <Library Include="..\..\VTFLib\lib\x86\VTFLib.lib" />
     <Library Include="..\libs\intl.lib" />
     <Library Include="..\libs\libgimp-2.0-0.lib" />
     <Library Include="..\libs\libgimpbase-2.0-0.lib" />
     <Library Include="..\libs\libgimpui-2.0-0.lib" />
     <Library Include="..\libs\libgimpwidgets-2.0-0.lib" />
-    <Library Include="..\libs\libglib-2.0-0.lib" />
-    <Library Include="..\libs\libgobject-2.0-0.lib" />
-    <Library Include="..\libs\libgtk-win32-2.0-0.lib" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="file-vtf.h" />

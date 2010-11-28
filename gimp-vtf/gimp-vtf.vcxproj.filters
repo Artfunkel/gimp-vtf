@@ -36,13 +36,13 @@
     <Library Include="..\libs\libgimpwidgets-2.0-0.lib">
       <Filter>Libraries</Filter>
     </Library>
-    <Library Include="..\libs\libglib-2.0-0.lib">
+    <Library Include="C:\gtk+-2.22.0\lib\glib-2.0.lib">
       <Filter>Libraries</Filter>
     </Library>
-    <Library Include="..\libs\libgobject-2.0-0.lib">
+    <Library Include="C:\gtk+-2.22.0\lib\gtk-win32-2.0.lib">
       <Filter>Libraries</Filter>
     </Library>
-    <Library Include="..\libs\libgtk-win32-2.0-0.lib">
+    <Library Include="C:\gtk+-2.22.0\lib\gobject-2.0.lib">
       <Filter>Libraries</Filter>
     </Library>
   </ItemGroup>
