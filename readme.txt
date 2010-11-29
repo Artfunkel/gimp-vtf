@@ -1,5 +1,5 @@
-    GIMP VTF PLUG-IN 1.0.1
-Tom Edwards, 21st November 2010
+    GIMP VTF PLUG-IN 1.0.2
+Tom Edwards, 29th November 2010
 *******************************
 
 To install, extract both the EXE and DLL to your
@@ -15,6 +15,15 @@ source code, visit <http://code.google.com/p/gimp-vtf/>.
 
 Changes
 *******
+
+1.0.2
+ * Fixed GIMP error report on toggling "Use layer as alpha
+   channel" when there are no suitable layers
+ * Further tweaks to format list: wierder options removed,
+   remainder better sorted
+ * Corrected reported alpha bits for BGRA4444
+ * Renamed "Compression" header to "Pixel format", as only
+   the DXTs are really compressed
 
 1.0.1
  * Fixed save failure when using the only layer in the

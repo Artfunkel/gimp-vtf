@@ -303,7 +303,10 @@ static void toggle_alpha_layer(GtkToggleButton *togglebutton, gpointer user_data
 {		
 	if ( gtk_toggle_button_get_active( GTK_TOGGLE_BUTTON(togglebutton) ) )
 	{
-		set_alpha_layer();
+		gint alpha_id;
+		gimp_int_combo_box_get_active(GIMP_INT_COMBO_BOX(alpha_layer_select), &alpha_id);
+		if (alpha_id != -1)
+			set_alpha_layer();
 		gtk_widget_set_sensitive(alpha_layer_select,TRUE);
 	}
 	else
@@ -349,7 +352,7 @@ static gboolean show_options(gint32 image_ID)
 	GtkWidget*	main_vbox;
 	GtkWidget*	alignment;
 	
-	GtkWidget*	scrollbox;
+	//GtkWidget*	scrollbox;
 	GtkWidget*	comp_list_widget;
 	GtkCList*	comp_list;
 
@@ -384,12 +387,12 @@ static gboolean show_options(gint32 image_ID)
 	gtk_widget_show (main_vbox);
 
 	// List scrollbox
-	scrollbox = gtk_scrolled_window_new(NULL,NULL);
+	/*scrollbox = gtk_scrolled_window_new(NULL,NULL);
 	gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(scrollbox), GTK_POLICY_NEVER, GTK_POLICY_ALWAYS);
 	gtk_widget_set_size_request(scrollbox,-1,250);
 
 	gtk_container_add (GTK_CONTAINER (main_vbox), scrollbox);
-	gtk_widget_show (scrollbox);
+	gtk_widget_show (scrollbox);*/
 		
 	// List of compression formats
 	comp_list_widget = gtk_clist_new(2);
@@ -399,7 +402,7 @@ static gboolean show_options(gint32 image_ID)
 	gtk_clist_set_shadow_type(comp_list,GTK_SHADOW_ETCHED_IN);
 	
 	gtk_clist_set_column_title(comp_list,0,"Alpha");
-	gtk_clist_set_column_title(comp_list,1,"Compression");
+	gtk_clist_set_column_title(comp_list,1,"Pixel format");
 	gtk_clist_column_titles_passive(comp_list);
 	gtk_clist_column_titles_show(comp_list);
 
@@ -418,7 +421,7 @@ static gboolean show_options(gint32 image_ID)
 	comp_list->focus_row = gimpVTFOpt.CompressionMode;
 
 	gtk_widget_show(comp_list_widget);
-	gtk_container_add( GTK_CONTAINER(scrollbox), comp_list_widget );
+	gtk_container_add( GTK_CONTAINER(main_vbox), comp_list_widget );
 	
 	// Layer use
 	LayerUseHBox = gtk_hbox_new (FALSE, 6);
