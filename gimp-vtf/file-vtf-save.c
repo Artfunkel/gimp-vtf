@@ -59,6 +59,9 @@ void save(gint nparams, const GimpParam* param, gint* nreturn_vals)
 	guint*			layer_iterator;
 
 	gchar*			progress_frame_label;
+
+	GimpImageBaseType	img_type;
+	gint				colourmap_size;	
 	
 	vlUInt				vtf_bindcode;
 	SVTFCreateOptions	vlVTFOpt;
@@ -132,6 +135,19 @@ void save(gint nparams, const GimpParam* param, gint* nreturn_vals)
 	if (alpha_layer_ID)
 		layers_to_export--;
 
+	// convert image to RGB. It would be nice if this could happen per-drawable!
+	img_type = gimp_image_base_type(image_ID);
+	switch( img_type )
+	{
+	case GIMP_RGB:
+		break;
+	case GIMP_INDEXED:
+		gimp_image_get_colormap(image_ID,&colourmap_size);
+	case GIMP_GRAY:
+		gimp_image_convert_rgb(image_ID);
+		break;
+	}
+
 	switch(gimpVTFOpt.FrameMode)
 	{
 	case VTF_MERGE_VISIBLE:
@@ -185,28 +201,30 @@ void save(gint nparams, const GimpParam* param, gint* nreturn_vals)
 		GimpPixelRgn	pixel_rgn;
 		GimpDrawable*	drawable;
 		vlByte*			rgbaBuf;
+		gboolean		added_to_img;
 
 		if ( layer_IDs[*layer_iterator] == alpha_layer_ID )
 			return;
 
 		if (gimpVTFOpt.FrameMode != VTF_MERGE_VISIBLE)
+		{
 			drawable_ID = gimp_layer_new_from_drawable(layer_IDs[*layer_iterator],image_ID);
+
+			gimp_image_add_layer(image_ID,drawable_ID,-1);
+			gimp_layer_resize_to_image_size(drawable_ID);
+			added_to_img = TRUE;
+		}
 		
 		if (alpha_layer_ID)
 		{
-			gimp_image_add_layer(image_ID,drawable_ID,0);
+			if (!added_to_img)
+			{
+				gimp_image_add_layer(image_ID,drawable_ID,0);
+				added_to_img = TRUE;
+			}
 
 			gimp_layer_add_mask( drawable_ID, gimp_layer_create_mask(alpha_layer_ID,GIMP_ADD_COPY_MASK) );
 			gimp_layer_remove_mask( drawable_ID, GIMP_MASK_APPLY );
-		}
-
-		switch( gimp_drawable_type(drawable_ID) )
-		{
-		default:
-			gimp_image_convert_rgb(drawable_ID);
-		case GIMP_RGBA_IMAGE:
-		case GIMP_RGB_IMAGE:
-			break;
 		}
 
 		gimp_layer_add_alpha(drawable_ID); // always want to send VTFLib an alpha channel
@@ -234,7 +252,7 @@ void save(gint nparams, const GimpParam* param, gint* nreturn_vals)
 		rbgaImages[(guint)layers_to_export - *layer_iterator - 1] = rgbaBuf;
 		gimp_drawable_detach(drawable);		
 
-		if (alpha_layer_ID)
+		if (added_to_img)
 			gimp_image_remove_layer(image_ID,drawable_ID);
 	}
 
@@ -270,6 +288,19 @@ void save(gint nparams, const GimpParam* param, gint* nreturn_vals)
 		g_free(rbgaImages[i]);
 	g_free(rbgaImages);
 	vlDeleteImage(vtf_bindcode);
+
+	// restore image colour type	
+	switch( img_type )
+	{
+	case GIMP_RGB:
+		break;
+	case GIMP_INDEXED:
+		gimp_image_convert_indexed(image_ID,GIMP_NO_DITHER,GIMP_MAKE_PALETTE,colourmap_size,FALSE,FALSE,"null");
+		break;
+	case GIMP_GRAY:
+		gimp_image_convert_grayscale(image_ID);
+		break;
+	}
 	
 	// loose UI ends
 	gimp_progress_end();
@@ -436,7 +467,7 @@ static gboolean show_options(gint32 image_ID)
 		_("Nothing (merge visible)"), VTF_MERGE_VISIBLE,
 		_("Animation frames"),    VTF_ANIMATION,
 		_("Environment map faces"), VTF_ENVMAP,
-		_("Volumetrix texture slices"), VTF_VOLUME,
+		_("Volumetric texture slices"), VTF_VOLUME,
 		NULL);
 
 	g_signal_connect (LayerUseCombo, "changed", G_CALLBACK (change_frame_use), NULL);

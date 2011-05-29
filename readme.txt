@@ -1,6 +1,6 @@
-    GIMP VTF PLUG-IN 1.0.2
-Tom Edwards, 29th November 2010
-*******************************
+           GIMP VTF PLUG-IN 1.0.3
+         Tom Edwards, 29th May 2011
+       *******************************
 
 To install, extract both the EXE and DLL to your
 GIMP plug-ins folder. This is typically at 
@@ -16,6 +16,11 @@ source code, visit <http://code.google.com/p/gimp-vtf/>.
 Changes
 *******
 
+1.0.3
+ * Fixed errors when saving grayscale or indexed images
+ * Layers are now resized and offset as appropriate when
+   saved as frames/faces/slices
+  
 1.0.2
  * Fixed GIMP error report on toggling "Use layer as alpha
    channel" when there are no suitable layers
