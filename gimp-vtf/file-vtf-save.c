@@ -201,7 +201,7 @@ void save(gint nparams, const GimpParam* param, gint* nreturn_vals)
 		GimpPixelRgn	pixel_rgn;
 		GimpDrawable*	drawable;
 		vlByte*			rgbaBuf;
-		gboolean		added_to_img;
+		gboolean		added_to_img = FALSE;
 
 		if ( layer_IDs[*layer_iterator] == alpha_layer_ID )
 			return;
