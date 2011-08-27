@@ -1,0 +1,179 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
+"Last-Translator: Tom Edwards <contact@steamreview.org>\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=iso-8859-1\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+msgid "#lod_control_label"
+msgstr "Standard mipmap:"
+
+msgid "#lod_control_tip"
+msgstr "Resolution at High texture detail.<small><i>\n\n"
+"Lowering this setting allows a texture to reserve its largest mips for Very High texture detail (mat_picmip -1) and beyond. Requires VTF 7.3 or later.</i></small>"
+
+msgid "#layer_an_alpha_label"
+msgstr "<b>Use layer as alpha channel:</b>"
+
+msgid "#layer_as_alpha_tip"
+msgstr "Override the final alpha channel with the contents of this layer.<small>\n\n"
+"<i>GIMP assumes that alpha is transparency and will happily destroy pixels it considers invisible. Separating the alpha channel into another layer bypasses that issue as well as making mask editing generally easier.</i></small>"
+
+msgid "#not_bump"
+msgstr "Not bump"
+
+msgid "#bump_flag"
+msgstr "Bump"
+
+msgid "#ssbump_flag"
+msgstr "SSBump"
+
+msgid "#bump_map_tip"
+msgstr "Mark this texture as being a bump map.<small>\n\n"
+"<i>To generate a bump map, download the \"normalmap\" plug-in.</i></small>"
+
+# mnemonic not visible under the 'p' character!
+msgid "#clamp_label"
+msgstr "Clam_p"
+
+msgid "#clamp_tip"
+msgstr "Do not repeat the texture across a surface.<small><i>\n\n"
+"Prevents colour bleed by smearing the texture's edge pixels outward.</i></small>"
+
+msgid "#nolod_label"
+msgstr "No LO_D"
+
+msgid "#nolod_tip"
+msgstr "Ignore the texture detail setting.<small><i>\n\n"
+"Forces Source to load and render <b>at least</b> the standard mipmap regardless of the user's texture detail setting.</i></small>"
+
+msgid "#mipmap_label"
+msgstr "_Mipmaps"
+
+msgid "#mipmap_tip"
+msgstr "Generate and embed low-resolution copies of the texture.<small><i>\n\n"
+"Mips are used on distant surfaces to improve performance and reduce resizing artifacts. Large mips can also be discarded to conserve texture memory. It is recommended to disable mips on UI textures.</i></small>"
+
+msgid "#settings_label"
+msgstr "<b>Settings:</b>"
+
+msgid "#alpha_channel_title"
+msgstr "Alpha"
+
+msgid "#pixel_format_title"
+msgstr "Pixel format"
+
+msgid "#vtf_version_label"
+msgstr "VTF version to use. Older games cannot read newer formats.<small><i>\n\n"
+"7.2: Half-Life 2, 2004\n"
+"7.3 + 7.4: Orange Box, 2007\n"
+"7.5: Alien Swarm, 2010</i></small>"
+
+msgid "#advanced_mode_label"
+msgstr "Ad_vanced"
+
+msgid "#advanced_mode_tip"
+msgstr "Choose a pixel format from a list"
+
+msgid "#with_alpha_label"
+msgstr "_Alpha"
+
+msgid "#with_alpha_tip"
+msgstr "Save the texture with an alpha channel.<small><i>\n\n"
+"Alpha is an invisible \"fourth colour\" that can serve many different uses.</i></small>"
+
+msgid "#with_compression_label"
+msgstr "Comp_ress"
+
+msgid "#with_compression_tip"
+msgstr "Apply lossy DXT compression to the texture.<small><i>\n\n"
+"DXT is an algorithm that can be decoded very quickly. It saves memory but degrades colour accuracy, so don't use it for images with fine gradients.</i></small>"
+
+msgid "#layers_merge_visible_label"
+msgstr "Nothing (merge visible)"
+
+msgid "#layers_animation_label"
+msgstr "Animation frames"
+
+msgid "#layers_envmap_label"
+msgstr "Environment map faces"
+
+msgid "#layers_volume_label"
+msgstr "Volumetric texture slices"
+
+msgid "#layers_use_label"
+msgstr "Use _layers as:"
+
+msgid "#format_title"
+msgstr "<b>Format:</b>"
+
+# %s: name of image
+msgid "#window_title"
+msgstr "%s save options"
+
+msgid "#missing_alpha_warning"
+msgstr "<b><big>Valve Texture Format Message</big></b>\n\n"
+"Could not find the alpha layer."
+
+msgid "#invalid_alpha_error"
+msgstr "Invalid alpha layer"
+
+# %s: width/height
+# %i: current value
+# %s: width/height
+# %i: previous valid value
+# %i: next valid value
+msgid "#image_size_error"
+msgstr "Image %s (%ipx) is not a power of two. Nearest valid %ss are %i and %i."
+
+msgid "#width_word"
+msgstr "width"
+
+msgid "#height_word"
+msgstr "height"
+
+msgid "#combined_layer_title"
+msgstr "VTF combined"
+
+msgid "#anim_frame_word"
+msgstr "animation frame"
+
+msgid "#envmap_face_word"
+msgstr "environment map face"
+
+msgid "#volume_slice_word"
+msgstr "volumetric slice"
+
+msgid "#save_message_single"
+msgstr "Saving to VTF..."
+
+msgid "#save_message_combined"
+msgstr "Saving combined layers to VTF..."
+
+msgid "#save_message_multi"
+msgstr "Saving %i VTF %ss..."
+
+msgid "#internal_4bbp_error"
+msgstr "Internal VTF plug-in error: image was not 4bpp"
+
+msgid "#compressed_bump_warning"
+msgstr "Image saved, but compressing bump maps is not recommended!"
+
+msgid "#opening_dxt_warning"
+msgstr "Image is DXT compressed. This is a lossy format...do you have the original file?"
+
+msgid "#load_message_single"
+msgstr "Loading VTF..."
+
+# %i: layer count
+# %s: layer use
+msgid "#load_message_multi"
+msgstr "Loading %i VTF %ss..."
+
+msgid "#no_memory_error"
+msgstr "Out of memory."
+

@@ -1,6 +1,6 @@
-           GIMP VTF PLUG-IN 1.0.3
-         Tom Edwards, 29th May 2011
-       *******************************
+GIMP VTF PLUG-IN 1.1
+Tom Edwards, 27th August 2011
+*******************************
 
 To install, extract both the EXE and DLL to your
 GIMP plug-ins folder. This is typically at 
@@ -15,6 +15,30 @@ source code, visit <http://code.google.com/p/gimp-vtf/>.
 
 Changes
 *******
+
+1.1
+ * Upgraded to VTFLib 1.3.2 for VTF 7.5 support
+ * Each open image now has its own save settings
+ * Save settings are now filled in when loading a VTF
+ * Flags not covered by the UI are now preserved when
+   saving an opened file
+ * Added a simplified format selection (do you want
+   compression, do you want alpha)
+ * Added options to save with LOD disabled, Clamping
+   and/or the Bump/SSBump flags
+ * Added a VTF version option when saving
+ * Added LOD Control setting (human-configurable!)
+ * Added explanatory tooltips
+ * Added localisation support (no actual translations,
+   but creating them is now possible)
+ * Fixed errors when saving an image after its designated
+   alpha layer has been removed  
+ * Fixed error when alpha layer doesn't fit the image
+ * Graceful out-of-memory handling
+
+1.0.4
+ * Fixed embarrassing error when saving a single-frame
+   image. It took 300 downloads to get one bug report...
 
 1.0.3
  * Fixed errors when saving grayscale or indexed images

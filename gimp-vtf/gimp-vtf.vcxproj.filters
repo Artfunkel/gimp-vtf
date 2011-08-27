@@ -18,9 +18,6 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <Library Include="..\..\VTFLib\lib\x86\VTFLib.lib">
-      <Filter>Libraries</Filter>
-    </Library>
     <Library Include="..\libs\intl.lib">
       <Filter>Libraries</Filter>
     </Library>
@@ -45,6 +42,9 @@
     <Library Include="C:\gtk+-2.22.0\lib\gobject-2.0.lib">
       <Filter>Libraries</Filter>
     </Library>
+    <Library Include="..\..\..\Libraries\vtflib132\lib\x86\VTFLib.lib">
+      <Filter>Libraries</Filter>
+    </Library>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="file-vtf.c">
@@ -61,10 +61,21 @@
     <ClInclude Include="file-vtf.h">
       <Filter>Source Files</Filter>
     </ClInclude>
+    <ClInclude Include="resources.h">
+      <Filter>Resource Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="file-vtf.rc">
       <Filter>Resource Files</Filter>
     </ResourceCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <CustomBuild Include="file-vtf_en.po">
+      <Filter>Resource Files</Filter>
+    </CustomBuild>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\readme.txt" />
   </ItemGroup>
 </Project>

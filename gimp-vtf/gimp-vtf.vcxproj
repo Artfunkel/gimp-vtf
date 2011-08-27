@@ -39,18 +39,20 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <OutDir>$(SolutionDir)bin\</OutDir>
+    <CustomBuildBeforeTargets>ResourceCompile</CustomBuildBeforeTargets>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <OutDir>$(SolutionDir)bin\</OutDir>
+    <CustomBuildBeforeTargets>ResourceCompile</CustomBuildBeforeTargets>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
-      <AdditionalIncludeDirectories>C:\Users\Tom\Documents\Visual Studio 2010\Projects\VTFLib\lib;C:\gimp-2.6.11;C:\gtk+-2.22.0\include\glib-2.0;C:\gtk+-2.22.0\lib\glib-2.0\include;C:\gtk+-2.22.0\include;C:\gtk+-2.22.0\include\gtk-2.0;C:\gtk+-2.22.0\include\cairo;C:\gtk+-2.22.0\include\pango-1.0;C:\gtk+-2.22.0\lib\gtk-2.0\include;C:\gtk+-2.22.0\include\gdk-pixbuf-2.0;C:\gtk+-2.22.0\include\atk-1.0</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Users\Tom\Documents\Visual Studio 2010\Libraries\vtflib132\lib;C:\gnu\gimp-2.6.11;C:\gnu\gtk+-2.22.0\include\glib-2.0;C:\gnu\gtk+-2.22.0\lib\glib-2.0\include;C:\gnu\gtk+-2.22.0\include;C:\gnu\gtk+-2.22.0\include\gtk-2.0;C:\gnu\gtk+-2.22.0\include\cairo;C:\gnu\gtk+-2.22.0\include\pango-1.0;C:\gnu\gtk+-2.22.0\lib\gtk-2.0\include;C:\gnu\gtk+-2.22.0\include\gdk-pixbuf-2.0;C:\gnu\gtk+-2.22.0\include\atk-1.0</AdditionalIncludeDirectories>
       <CompileAs>CompileAsC</CompileAs>
       <PreprocessorDefinitions>_MBCS;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -60,6 +62,9 @@
     <PostBuildEvent>
       <Command>copy "$(TargetPath)" "$(USERPROFILE)\.gimp-2.6\plug-ins\"</Command>
     </PostBuildEvent>
+    <PreBuildEvent>
+      <Command>C:\gnu\gettext\bin\msgconv.exe -D "$(ProjectDir)"</Command>
+    </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
@@ -67,7 +72,7 @@
       <Optimization>MaxSpeed</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
-      <AdditionalIncludeDirectories>C:\Users\Tom\Documents\Visual Studio 2010\Projects\VTFLib\lib;C:\gimp-2.6.11;C:\gtk+-2.22.0\include\glib-2.0;C:\gtk+-2.22.0\lib\glib-2.0\include;C:\gtk+-2.22.0\include;C:\gtk+-2.22.0\include\gtk-2.0;C:\gtk+-2.22.0\include\cairo;C:\gtk+-2.22.0\include\pango-1.0;C:\gtk+-2.22.0\lib\gtk-2.0\include;C:\gtk+-2.22.0\include\gdk-pixbuf-2.0;C:\gtk+-2.22.0\include\atk-1.0</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Users\Tom\Documents\Visual Studio 2010\Libraries\vtflib132\lib;C:\gnu\gimp-2.6.11;C:\gnu\gtk+-2.22.0\include\glib-2.0;C:\gnu\gtk+-2.22.0\lib\glib-2.0\include;C:\gnu\gtk+-2.22.0\include;C:\gnu\gtk+-2.22.0\include\gtk-2.0;C:\gnu\gtk+-2.22.0\include\cairo;C:\gnu\gtk+-2.22.0\include\pango-1.0;C:\gnu\gtk+-2.22.0\lib\gtk-2.0\include;C:\gnu\gtk+-2.22.0\include\gdk-pixbuf-2.0;C:\gnu\gtk+-2.22.0\include\atk-1.0</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>_MBCS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
     </ClCompile>
@@ -81,6 +86,10 @@
     <PostBuildEvent>
       <Command>copy "$(TargetPath)" "$(USERPROFILE)\.gimp-2.6\plug-ins\"</Command>
     </PostBuildEvent>
+    <PreBuildEvent>
+      <Command>
+      </Command>
+    </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="file-vtf-load.c" />
@@ -88,10 +97,10 @@
     <ClCompile Include="file-vtf-save.c" />
   </ItemGroup>
   <ItemGroup>
-    <Library Include="C:\gtk+-2.22.0\lib\glib-2.0.lib" />
-    <Library Include="C:\gtk+-2.22.0\lib\gobject-2.0.lib" />
-    <Library Include="C:\gtk+-2.22.0\lib\gtk-win32-2.0.lib" />
-    <Library Include="..\..\VTFLib\lib\x86\VTFLib.lib" />
+    <Library Include="..\..\..\Libraries\vtflib132\lib\x86\VTFLib.lib" />
+    <Library Include="C:\gnu\gtk+-2.22.0\lib\glib-2.0.lib" />
+    <Library Include="C:\gnu\gtk+-2.22.0\lib\gobject-2.0.lib" />
+    <Library Include="C:\gnu\gtk+-2.22.0\lib\gtk-win32-2.0.lib" />
     <Library Include="..\libs\intl.lib" />
     <Library Include="..\libs\libgimp-2.0-0.lib" />
     <Library Include="..\libs\libgimpbase-2.0-0.lib" />
@@ -100,9 +109,24 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="file-vtf.h" />
+    <ClInclude Include="resources.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="file-vtf.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <CustomBuild Include="file-vtf_en.po">
+      <FileType>Document</FileType>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">C:\gnu\gettext\bin\msgfmt.exe "%(FullPath)" -o "$(ProjectDir)%(Filename).mo"</Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Compiling translation data "%(Identity)"</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(ProjectDir)%(Filename).mo;%(Outputs)</Outputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">C:\gnu\gettext\bin\msgfmt.exe "%(FullPath)" -o "$(ProjectDir)%(Filename).mo"</Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Compiling translation data "%(Identity)"</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(ProjectDir)%(Filename).mo;%(Outputs)</Outputs>
+    </CustomBuild>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\readme.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

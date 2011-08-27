@@ -1,0 +1,2 @@
+#define MO_FILE_EN 330
+#define IDR_LOCALISATION 332
