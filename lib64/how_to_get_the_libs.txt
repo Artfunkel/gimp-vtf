@@ -1,6 +1,6 @@
 You don't need to build GIMP to get .lib files. Just grab the .def files from the source package, put them in the same folder as the compiled DLLs, rename them to match the list below, then open the Visual Studio Command Prompt and run this command:
 
-lib /def:libwhatever.def /out:libwhatever.lib /machine:x86
+lib /def:libwhatever.def /out:libwhatever.lib /machine:x64
 
 To build gimp-vtf you will need:
 

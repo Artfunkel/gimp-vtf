@@ -75,7 +75,7 @@ void load(gint nparams, const GimpParam* param, gint* nreturn_vals, gboolean thu
 				gimp_pixel_rgn_set_rect(&pixel_rgn, rgbaBuf, 0,0, mip_width,mip_height);
 					
 				gimp_drawable_update(layer_ID, 0, 0, mip_width, mip_height);
-				gimp_image_add_layer(image_ID,layer_ID,0);
+				gimp_image_insert_layer(image_ID,layer_ID,0,0);
 				gimp_drawable_detach(drawable);
 					
 				// Alpha doesn't always represent transparency in game engine textures, so eliminate it from thumbs.
@@ -163,7 +163,7 @@ void load(gint nparams, const GimpParam* param, gint* nreturn_vals, gboolean thu
 								gimp_layer_flatten(layer_ID);
 
 							gimp_drawable_update(layer_ID, 0, 0, width, height);
-							gimp_image_add_layer(image_ID,layer_ID,0);
+							gimp_image_insert_layer(image_ID,layer_ID,0,0);
 							gimp_drawable_detach(drawable);
 											
 							vtf_ret_values[0].data.d_status = GIMP_PDB_SUCCESS;

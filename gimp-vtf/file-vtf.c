@@ -11,7 +11,6 @@
 
 #include "file-vtf.h"
 
-#include <libgimp/gimpexport.h>
 #ifdef _DEBUG
 #include <libgimp/gimpui.h>
 #endif
@@ -20,7 +19,7 @@
 #include "resources.h"
 
 #define COPYRIGHT    "Tom Edwards (contact@steamreview.org)"
-#define RELEASE_DATE "August 2011"
+#define RELEASE_DATE "February 2012"
 
 static void query();
 static void run(const gchar* name, gint nparams, const GimpParam* param, gint* nreturn_vals, GimpParam** return_vals);
@@ -72,6 +71,7 @@ static void query()
 		{ GIMP_PDB_INT8,	"compression",	"Pixel format to use" },
 		{ GIMP_PDB_INT32,	"alpha-layer-tattoo",	"Tattoo of the layer to use as the alpha channel (0 for none)" },
 		{ GIMP_PDB_INT8,	"layer-mode",	"How should layers be handled? 0 = merge, 1 = frames, 2 = faces, 3 = slices" },
+		// new in 1.1
 		{ GIMP_PDB_INT8,	"version",		"VTF minor version (7.n)" },
 		{ GIMP_PDB_INT8,	"mips",			"Generate mipmaps?" },
 		{ GIMP_PDB_INT8,	"nolod",		"Always load at full resolution?" },

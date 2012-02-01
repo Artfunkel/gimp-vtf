@@ -13,37 +13,67 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
-    <Filter Include="Libraries">
+    <Filter Include="Lib64">
+      <UniqueIdentifier>{c8764dec-c6ab-4b3d-b58e-2134109a0e07}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Lib">
       <UniqueIdentifier>{5eaa3d21-22cd-4702-aefe-17ed8aa2ba37}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <Library Include="..\libs\intl.lib">
-      <Filter>Libraries</Filter>
+    <Library Include="..\..\..\Libraries\vtflib132\lib\x86\VTFLib.lib">
+      <Filter>Lib</Filter>
     </Library>
-    <Library Include="..\libs\libgimp-2.0-0.lib">
-      <Filter>Libraries</Filter>
+    <Library Include="..\..\..\Libraries\vtflib132\lib\x64\VTFLib.lib">
+      <Filter>Lib64</Filter>
     </Library>
-    <Library Include="..\libs\libgimpbase-2.0-0.lib">
-      <Filter>Libraries</Filter>
+    <Library Include="..\lib64\libgimpui-2.0-0.lib">
+      <Filter>Lib64</Filter>
+    </Library>
+    <Library Include="..\lib64\libgimpwidgets-2.0-0.lib">
+      <Filter>Lib64</Filter>
+    </Library>
+    <Library Include="..\lib64\libintl-8.lib">
+      <Filter>Lib64</Filter>
+    </Library>
+    <Library Include="..\lib64\libgimp-2.0-0.lib">
+      <Filter>Lib64</Filter>
+    </Library>
+    <Library Include="..\lib64\libgimpbase-2.0-0.lib">
+      <Filter>Lib64</Filter>
+    </Library>
+    <Library Include="..\lib64\libgtk-win32-2.0-0.lib">
+      <Filter>Lib64</Filter>
+    </Library>
+    <Library Include="..\lib64\libgobject-2.0-0.lib">
+      <Filter>Lib64</Filter>
+    </Library>
+    <Library Include="..\lib64\libglib-2.0-0.lib">
+      <Filter>Lib64</Filter>
     </Library>
     <Library Include="..\libs\libgimpui-2.0-0.lib">
-      <Filter>Libraries</Filter>
+      <Filter>Lib</Filter>
     </Library>
     <Library Include="..\libs\libgimpwidgets-2.0-0.lib">
-      <Filter>Libraries</Filter>
+      <Filter>Lib</Filter>
     </Library>
-    <Library Include="C:\gtk+-2.22.0\lib\glib-2.0.lib">
-      <Filter>Libraries</Filter>
+    <Library Include="..\libs\libglib-2.0-0.lib">
+      <Filter>Lib</Filter>
     </Library>
-    <Library Include="C:\gtk+-2.22.0\lib\gtk-win32-2.0.lib">
-      <Filter>Libraries</Filter>
+    <Library Include="..\libs\libgobject-2.0-0.lib">
+      <Filter>Lib</Filter>
     </Library>
-    <Library Include="C:\gtk+-2.22.0\lib\gobject-2.0.lib">
-      <Filter>Libraries</Filter>
+    <Library Include="..\libs\libgtk-win32-2.0-0.lib">
+      <Filter>Lib</Filter>
     </Library>
-    <Library Include="..\..\..\Libraries\vtflib132\lib\x86\VTFLib.lib">
-      <Filter>Libraries</Filter>
+    <Library Include="..\libs\libintl-8.lib">
+      <Filter>Lib</Filter>
+    </Library>
+    <Library Include="..\libs\libgimp-2.0-0.lib">
+      <Filter>Lib</Filter>
+    </Library>
+    <Library Include="..\libs\libgimpbase-2.0-0.lib">
+      <Filter>Lib</Filter>
     </Library>
   </ItemGroup>
   <ItemGroup>

@@ -3,11 +3,12 @@
 #include <richedit.h>
 #include <resources.h>
 
+1001               ICON           "file-vtf.ico"
+
 LANGUAGE LANG_NEUTRAL, SUBLANG_NEUTRAL
 1 VERSIONINFO
-	FILEVERSION		1,1,0,0
-	PRODUCTVERSION	2,6,11,0
-	FILEOS			VOS_NT_WINDOWS32
+	FILEVERSION		1,2,0,0
+	PRODUCTVERSION	2,7,4,0
 	FILETYPE		VFT_APP
 	FILESUBTYPE		VFT2_UNKNOWN
 	FILEFLAGSMASK	0x00000000
@@ -19,10 +20,12 @@ LANGUAGE LANG_NEUTRAL, SUBLANG_NEUTRAL
 		{
 			VALUE "Comments", "Adds Valve Texture Format support to the GIMP"
 			VALUE "FileDescription", "GIMP VTF plugin"
-			VALUE "InternalName", "file-vtf.exe"
+			VALUE "FileVersion", "1.2"
+			VALUE "InternalName", "file-vtf"
 			VALUE "OriginalFilename", "file-vtf.exe"
 			VALUE "ProductName", "GIMP"
-			VALUE "ProductVersion", "2.6.11"
+			VALUE "ProductVersion", "2.7.4"
+			VALUE "LegalCopyright", "LGPL 2.1"
 		}
 	}
 	BLOCK "VarFileInfo"

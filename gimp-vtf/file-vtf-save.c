@@ -10,7 +10,6 @@
  */
 
 #include <libgimp/gimp.h>
-#include <libgimp/gimpexport.h>
 #include <libgimp/gimpui.h>
 
 #include "file-vtf.h"
@@ -228,7 +227,7 @@ void save(gint nparams, const GimpParam* param, gint* nreturn_vals)
 		{
 			alpha_layer_ID_original = alpha_layer_ID;
 			alpha_layer_ID = gimp_layer_new_from_drawable(alpha_layer_ID,image_ID);
-			gimp_image_add_layer(image_ID,alpha_layer_ID,0);
+			gimp_image_insert_layer(image_ID,alpha_layer_ID,0,0);
 			gimp_layer_resize_to_image_size(alpha_layer_ID);
 			gimp_drawable_set_visible(alpha_layer_ID,FALSE);
 		}
@@ -335,7 +334,7 @@ void save(gint nparams, const GimpParam* param, gint* nreturn_vals)
 			// we've not changed the layer yet, so just overwrite the drawable ID
 			drawable_ID = gimp_layer_new_from_drawable(layer_IDs[*layer_iterator],image_ID);
 
-			gimp_image_add_layer(image_ID,drawable_ID,-1);
+			gimp_image_insert_layer(image_ID,drawable_ID,0,-1);
 			gimp_layer_resize_to_image_size(drawable_ID);
 			layer_duplicated = TRUE;
 		}

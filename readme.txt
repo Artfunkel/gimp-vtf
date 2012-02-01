@@ -4,7 +4,7 @@ Tom Edwards, 27th August 2011
 
 To install, extract both the EXE and DLL to your
 GIMP plug-ins folder. This is typically at 
-C:\Users\<USER>\.gimp-x.x\plug-ins\.
+C:\Users\<USER>\.gimp-2.7\plug-ins\.
 
 If you prefer, there is also a plug-ins folder in 
 your main GIMP installation. This is at 
@@ -15,6 +15,10 @@ source code, visit <http://code.google.com/p/gimp-vtf/>.
 
 Changes
 *******
+
+1.2
+ * Built against GIMP 2.7.4
+ * Added x64 support
 
 1.1
  * Upgraded to VTFLib 1.3.2 for VTF 7.5 support
