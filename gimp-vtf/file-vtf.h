@@ -30,23 +30,25 @@
 
 GimpParam	vtf_ret_values[4];
 
-gint32 image_ID;
+static gint32		image_ID = -1;
+static GimpRunMode	run_mode = GIMP_RUN_INTERACTIVE;
+static gchar*		filename = 0;
 
 vlBool IsPowerOfTwo(vlUInt uiSize);
 vlUInt NextPowerOfTwo(vlUInt uiSize);
 
-void quit_error(gchar* message);
-void quit_error_mem();
+void record_error(gchar* message, GimpPDBStatusType type );
+void record_error_mem();
 
-typedef struct
+typedef struct vtfFormat
 {
 	gchar*			label;
 	VTFImageFormat	vlFormat;
 	gchar*			alpha_label;
 	gboolean		compressed;
-} s_vtfFormat;
+} vtfFormat_t;
 
-static const s_vtfFormat vtf_formats[] = {
+static const vtfFormat_t vtf_formats[] = {
 	{ "DXT1",		IMAGE_FORMAT_DXT1,		"-", TRUE },
 	{ "DXT1 with alpha", IMAGE_FORMAT_DXT1_ONEBITALPHA, "1-bit", TRUE },
 	{ "DXT3",		IMAGE_FORMAT_DXT3,		"8-bit", TRUE },
@@ -66,12 +68,12 @@ static const s_vtfFormat vtf_formats[] = {
 //	{ "BGRA5551",	IMAGE_FORMAT_BGRA5551,	"8-bit", FALSE },
 //	{ "UV88",		IMAGE_FORMAT_UV88,		"-", FALSE },
 //	{ "UVWQ8888",	IMAGE_FORMAT_UVWQ8888,	"8-bit", FALSE },
-	{ "RGBA16161616F",	IMAGE_FORMAT_RGBA16161616F,	"16-bit", FALSE },
-	{ "RGBA16161616",	IMAGE_FORMAT_RGBA16161616,	"16-bit", FALSE },
+//	{ "RGBA16161616 float",	IMAGE_FORMAT_RGBA16161616F,	"16-bit", FALSE },
+//	{ "RGBA16161616 int",	IMAGE_FORMAT_RGBA16161616,	"16-bit", FALSE },
 //	{ "UVLX8888",	IMAGE_FORMAT_UVLX8888,	"8-bit", FALSE },
 };
 
-static const guint num_vtf_formats = sizeof(vtf_formats)/sizeof(s_vtfFormat);
+static const guint num_vtf_formats = sizeof(vtf_formats)/sizeof(vtfFormat_t);
 
 static gboolean vtf_format_has_alpha(guint index)
 {
@@ -79,7 +81,7 @@ static gboolean vtf_format_has_alpha(guint index)
 }
 static gboolean vtf_format_is_compressed(guint index)
 {
-	return index < 4;
+	return vtf_formats[index].compressed;
 }
 static gboolean vtflib_format_has_alpha(VTFImageFormat format)
 {
@@ -92,23 +94,25 @@ static gboolean vtflib_format_has_alpha(VTFImageFormat format)
 
 // Save options
 
-typedef enum
+typedef enum VtfLayerUse
 {
 	VTF_MERGE_VISIBLE = 0,
 	VTF_ANIMATION,
 	VTF_ENVMAP,
 	VTF_VOLUME
-} VtfLayerUse;
+} VtfLayerUse_t;
 
-typedef enum
+typedef enum VtfBumpType
 {
 	NOT_BUMP = 0,
 	BUMP,
 	SSBUMP
-} VtfBumpType;
+} VtfBumpType_t;
 
-typedef struct
+typedef struct VtfSaveOptions
 {
+	gboolean	Enabled; // a layer group property really, but it needs to be saved
+
 	guint8		Version; // 7.n
 	gboolean	AdvancedSetup;
 
@@ -122,8 +126,8 @@ typedef struct
 	gboolean	Clamp;
 	gboolean	NoLOD;
 	gboolean	WithMips;
-	VtfBumpType	BumpType;
-	VtfLayerUse	LayerUse;
+	VtfBumpType_t	BumpType;
+	VtfLayerUse_t	LayerUse;
 	gint32		AlphaLayerTattoo;
 
 	guint32		GeneralFlags; // loaded from an existing VTF
@@ -131,12 +135,14 @@ typedef struct
 	// Resources
 	gchar	LodControlU;
 	gchar	LodControlV;
-} VtfSaveOptions;
+} VtfSaveOptions_t;
 
-static const gchar* get_vtf_options_ID(gint32 image_ID)
+static const VtfSaveOptions_t DefaultSaveOptions = { TRUE, 4, FALSE, FALSE, TRUE, 0, FALSE, FALSE, TRUE, NOT_BUMP, VTF_MERGE_VISIBLE, 0, 0, 0, 0 };
+
+static const gchar* get_vtf_options_ID(gint32 tattoo)
 {
 	static gchar settings_ID[64];
-	snprintf(settings_ID,64,"%s_%i",SAVE_PROC,image_ID);
+	snprintf(settings_ID,64,"%s_%i",SAVE_PROC,tattoo);
 	return settings_ID;
 }
 

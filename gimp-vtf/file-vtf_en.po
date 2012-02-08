@@ -21,7 +21,7 @@ msgstr "<b>Use layer as alpha channel:</b>"
 
 msgid "#layer_as_alpha_tip"
 msgstr "Override the final alpha channel with the contents of this layer.<small>\n\n"
-"<i>GIMP assumes that alpha is transparency and will happily destroy pixels it considers invisible. Separating the alpha channel into another layer bypasses that issue as well as making mask editing generally easier.</i></small>"
+"<i>GIMP assumes that alpha is transparency and will happily destroy pixels it considers invisible. Separating the alpha channel into another layer bypasses this issue (and makes mask editing easier in general).</i></small>"
 
 msgid "#not_bump"
 msgstr "Not bump"
@@ -48,7 +48,7 @@ msgid "#nolod_label"
 msgstr "No LO_D"
 
 msgid "#nolod_tip"
-msgstr "Ignore the texture detail setting.<small><i>\n\n"
+msgstr "Ignore the player's texture detail setting.<small><i>\n\n"
 "Forces Source to load and render <b>at least</b> the standard mipmap regardless of the user's texture detail setting.</i></small>"
 
 msgid "#mipmap_label"
@@ -113,7 +113,7 @@ msgstr "<b>Format:</b>"
 
 # %s: name of image
 msgid "#window_title"
-msgstr "%s save options"
+msgstr "Exporting to %s"
 
 msgid "#missing_alpha_warning"
 msgstr "<b><big>Valve Texture Format Message</big></b>\n\n"
@@ -122,13 +122,13 @@ msgstr "<b><big>Valve Texture Format Message</big></b>\n\n"
 msgid "#invalid_alpha_error"
 msgstr "Invalid alpha layer"
 
-# %s: width/height
+# %s: "width"/"height"
 # %i: current value
-# %s: width/height
+# %s: "width"/"height"
 # %i: previous valid value
 # %i: next valid value
 msgid "#image_size_error"
-msgstr "Image %s (%ipx) is not a power of two. Nearest valid %ss are %i and %i."
+msgstr "Layer %s (%ipx) is not a power of two. Nearest valid %ss are %i and %i."
 
 msgid "#width_word"
 msgstr "width"
@@ -149,15 +149,15 @@ msgid "#volume_slice_word"
 msgstr "volumetric slice"
 
 msgid "#save_message_single"
-msgstr "Saving to VTF..."
+msgstr "[%s] Saving to VTF..."
 
 msgid "#save_message_combined"
-msgstr "Saving combined layers to VTF..."
+msgstr "[%s] Saving combined layers to VTF..."
 
 msgid "#save_message_multi"
-msgstr "Saving %i VTF %ss..."
+msgstr "[%s] Saving %i VTF %ss..."
 
-msgid "#internal_4bbp_error"
+msgid "#internal_4bpp_error"
 msgstr "Internal VTF plug-in error: image was not 4bpp"
 
 msgid "#compressed_bump_warning"
@@ -177,3 +177,19 @@ msgstr "Loading %i VTF %ss..."
 msgid "#no_memory_error"
 msgstr "Out of memory."
 
+msgid "#unknown_error"
+msgstr "Unknown error."
+
+msgid "#layers_changed_error"
+msgstr "Could not find layer. Did you delete something?"
+
+# %s: layer group name
+# %s: error text
+msgid "#error_layergroup_wrapper"
+msgstr "Error when processing \"%s\": %s"
+
+msgid "#dummy_lg_name"
+msgstr "VTF export group"
+
+msgid "#no_data"
+msgstr "No data to export."

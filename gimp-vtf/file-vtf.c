@@ -68,7 +68,7 @@ static void query()
 		{ GIMP_PDB_DRAWABLE,"drawable",		"Drawable to save" },
 		{ GIMP_PDB_STRING,	"filename",		"The name of the file to save the image in" },
 		{ GIMP_PDB_STRING,	"raw-filename",	"The name of the file to save the image in" },
-		{ GIMP_PDB_INT8,	"compression",	"Pixel format to use" },
+		{ GIMP_PDB_INT8,	"compression",	"Pixel format to use" }, // lg-specific args start here
 		{ GIMP_PDB_INT32,	"alpha-layer-tattoo",	"Tattoo of the layer to use as the alpha channel (0 for none)" },
 		{ GIMP_PDB_INT8,	"layer-mode",	"How should layers be handled? 0 = merge, 1 = frames, 2 = faces, 3 = slices" },
 		// new in 1.1
@@ -77,8 +77,10 @@ static void query()
 		{ GIMP_PDB_INT8,	"nolod",		"Always load at full resolution?" },
 		{ GIMP_PDB_INT8,	"clamp",		"Prevent texture repetition?" },
 		{ GIMP_PDB_INT8,	"bump-type",	"0 = Not a bump map, 1 = Bump, 2 = SSBump" },
-		{ GIMP_PDB_INT8,	"lod-control-u",	"Power of two which describes the width of the standard mipmap (0 = undefined)" },
-		{ GIMP_PDB_INT8,	"lod-control-v",	"Power of two which describes the height of the standard mipmap (0 = undefined)" },
+		{ GIMP_PDB_INT8,	"lod-control-u",	"Power of 2 which describes the width of the standard mipmap (0 = undefined)" },
+		{ GIMP_PDB_INT8,	"lod-control-v",	"Power of 2 which describes the height of the standard mipmap (0 = undefined)" },
+		// new in 1.2
+		{ GIMP_PDB_LAYER,	"target-lg",	"The layer group being saved. (-1 = ignore layer groups)" },
 	} ;
 
 	// no effect
@@ -135,6 +137,7 @@ G_END_DECLS
 
 void save(gint nparams, const GimpParam* param, gint* nreturn_vals);
 void load(gint nparams, const GimpParam* param, gint* nreturn_vals, gboolean thumb);
+void remove_dummy_lg();
 
 static void run(const gchar* name, gint nparams, const GimpParam* param, gint* nreturn_vals, GimpParam** return_vals)
 {
@@ -245,30 +248,35 @@ static void run(const gchar* name, gint nparams, const GimpParam* param, gint* n
 			load(nparams,param,nreturn_vals,TRUE);
 	}		
 	else
-		quit_error((gchar*)vlGetLastError());
+		record_error((gchar*)vlGetLastError(),GIMP_PDB_EXECUTION_ERROR);
 	
 	vlDeleteImage(vtf_bindcode);
 	vlShutdown();
+
+	remove_dummy_lg();
 
 	if (image_ID != -1)
 		gimp_image_undo_thaw(image_ID);
 }
 
-void quit_error(gchar* message)
+void record_error(gchar* message, GimpPDBStatusType type)
 {
 	if ( vtf_ret_values[1].data.d_string )
 		return;
+	
+	if ( !message || strlen(message) == 0)
+		message = _("#unknown_error");
 
-	vtf_ret_values[0].data.d_status = GIMP_PDB_EXECUTION_ERROR;
+	vtf_ret_values[0].data.d_status = type;
 	vtf_ret_values[1].type          = GIMP_PDB_STRING;
 	vtf_ret_values[1].data.d_string = message;
 
 	// Can't actually terminate the process or GIMP will think it has crashed!
 }
 
-void quit_error_mem()
+void record_error_mem()
 {
-	quit_error(_("#no_memory_error"));
+	record_error(_("#no_memory_error"),GIMP_PDB_EXECUTION_ERROR);
 }
 
 // These two functions copied over from VTFLib

@@ -1,5 +1,5 @@
-GIMP VTF PLUG-IN 1.1
-Tom Edwards, 27th August 2011
+GIMP VTF PLUG-IN 1.2
+Tom Edwards, 6th February 2012
 *******************************
 
 To install, extract both the EXE and DLL to your
@@ -8,17 +8,26 @@ C:\Users\<USER>\.gimp-2.7\plug-ins\.
 
 If you prefer, there is also a plug-ins folder in 
 your main GIMP installation. This is at 
-<install dir>\lib\gimp\2.0\plug-ins\.
+<gimp install dir>\lib\gimp\2.0\plug-ins\.
 
 To get the latest version of the plugin and download 
-source code, visit <http://code.google.com/p/gimp-vtf/>.
+source code visit <http://code.google.com/p/gimp-vtf/>.
 
 Changes
 *******
 
 1.2
- * Built against GIMP 2.7.4
- * Added x64 support
+ * Upgraded to GIMP 2.7
+ * Added 64-bit support
+ * Now saves top-level layer groups to separate VTF
+   files. Store your albedos, bumps, masks, and
+   anything else in the same XCF!
+ * Now writes I8/IA8 if the image is grayscale and the
+   user wants an uncompressed format
+ * Fixed non-localised layer names when loading
+   animated VTFs
+ * Removed HDR pixel formats. Neither GIMP nor VTFLib
+   support this yet.
 
 1.1
  * Upgraded to VTFLib 1.3.2 for VTF 7.5 support

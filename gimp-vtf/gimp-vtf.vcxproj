@@ -100,6 +100,7 @@
     <PostBuildEvent>
       <Command>copy "$(TargetPath)" "$(USERPROFILE)\.gimp-2.7\plug-ins\"
 copy  "C:\Users\Tom\Documents\Visual Studio 2010\Libraries\vtflib132\bin\x86\vtflib.dll" "$(USERPROFILE)\.gimp-2.7\plug-ins\"</Command>
+      <Message>Deploying...</Message>
     </PostBuildEvent>
     <PreBuildEvent>
       <Command>C:\gnu\gettext\bin\msgconv.exe -D "$(ProjectDir)"</Command>
@@ -123,6 +124,7 @@ copy  "C:\Users\Tom\Documents\Visual Studio 2010\Libraries\vtflib132\bin\x86\vtf
     <PostBuildEvent>
       <Command>copy "$(TargetPath)" "$(USERPROFILE)\.gimp-2.7\plug-ins\"
 copy  "C:\Users\Tom\Documents\Visual Studio 2010\Libraries\vtflib132\bin\x64\vtflib.dll" "$(USERPROFILE)\.gimp-2.7\plug-ins\"</Command>
+      <Message>Deploying...</Message>
     </PostBuildEvent>
     <PreBuildEvent>
       <Command>C:\gnu\gettext\bin\msgconv.exe -D "$(ProjectDir)"</Command>
@@ -149,6 +151,7 @@ copy  "C:\Users\Tom\Documents\Visual Studio 2010\Libraries\vtflib132\bin\x64\vtf
     <PostBuildEvent>
       <Command>copy "$(TargetPath)" "$(USERPROFILE)\.gimp-2.7\plug-ins\"
 copy  "C:\Users\Tom\Documents\Visual Studio 2010\Libraries\vtflib132\bin\x86\vtflib.dll" "$(USERPROFILE)\.gimp-2.7\plug-ins\"</Command>
+      <Message>Deploying...</Message>
     </PostBuildEvent>
     <PreBuildEvent>
       <Command>
@@ -176,6 +179,7 @@ copy  "C:\Users\Tom\Documents\Visual Studio 2010\Libraries\vtflib132\bin\x86\vtf
     <PostBuildEvent>
       <Command>copy "$(TargetPath)" "$(USERPROFILE)\.gimp-2.7\plug-ins\"
 copy  "C:\Users\Tom\Documents\Visual Studio 2010\Libraries\vtflib132\bin\x64\vtflib.dll" "$(USERPROFILE)\.gimp-2.7\plug-ins\"</Command>
+      <Message>Deploying...</Message>
     </PostBuildEvent>
     <PreBuildEvent>
       <Command>

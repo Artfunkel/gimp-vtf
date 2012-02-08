@@ -18,3 +18,4 @@ While I'm here, you will also need these packages to compile:
 ftp://ftp.gimp.org/pub/gimp/v2.7/
 ftp://ftp.gnome.org/pub/gnome/binaries/win32/gtk+/2.24/ (go for the bundle)
 http://nemesis.thewavelength.net/index.php?p=40
+http://www.microsoft.com/download/en/details.aspx?id=8279

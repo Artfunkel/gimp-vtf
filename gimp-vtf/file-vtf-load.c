@@ -57,7 +57,7 @@ void load(gint nparams, const GimpParam* param, gint* nreturn_vals, gboolean thu
 			rgbaBuf = g_new(vlByte, mip_height*mip_width*4 );
 			if (!rgbaBuf)
 			{
-				quit_error_mem();
+				record_error_mem();
 				return;
 			}
 				
@@ -109,12 +109,12 @@ void load(gint nparams, const GimpParam* param, gint* nreturn_vals, gboolean thu
 			rgbaBuf = g_new(vlByte, vlImageGetWidth()*vlImageGetHeight()*4 );
 			if (!rgbaBuf)
 			{
-				quit_error_mem();
+				record_error_mem();
 				return;
 			}
 
 			if ( vlImageGetFrameCount() > 1)
-				layer_label = _("#frame_word");
+				layer_label = _("#anim_frame_word");
 			else if ( vlImageGetFaceCount() > 1 )
 				layer_label = _("#face_word");
 			else if ( vlImageGetDepth() > 1 )
@@ -173,11 +173,11 @@ void load(gint nparams, const GimpParam* param, gint* nreturn_vals, gboolean thu
 						}
 			{
 				// Generate image settings
-				VtfSaveOptions	gimpVtfOpt;
+				VtfSaveOptions_t	gimpVtfOpt;
 				VTFImageFormat	format;
 				guint i;
 
-				memset(&gimpVtfOpt,0,sizeof(VtfSaveOptions));
+				memset(&gimpVtfOpt,0,sizeof(VtfSaveOptions_t));
 			
 				// Version
 				gimpVtfOpt.Version = vlImageGetMinorVersion();
@@ -200,6 +200,12 @@ void load(gint nparams, const GimpParam* param, gint* nreturn_vals, gboolean thu
 					gimpVtfOpt.WithAlpha = TRUE;
 				case IMAGE_FORMAT_DXT1:
 					gimpVtfOpt.Compress = TRUE;
+					break;
+				case IMAGE_FORMAT_IA88:
+					gimpVtfOpt.WithAlpha = TRUE;
+				case IMAGE_FORMAT_I8:
+					gimpVtfOpt.Compress = FALSE;
+					gimp_image_convert_grayscale(image_ID);
 					break;
 				default:
 					gimpVtfOpt.AdvancedSetup = TRUE;
@@ -261,7 +267,7 @@ void load(gint nparams, const GimpParam* param, gint* nreturn_vals, gboolean thu
 				}
 
 				// Store
-				gimp_set_data (get_vtf_options_ID(image_ID), &gimpVtfOpt, sizeof (VtfSaveOptions));
+				gimp_set_data (get_vtf_options_ID(0), &gimpVtfOpt, sizeof (VtfSaveOptions_t));
 			}
 		}
 
