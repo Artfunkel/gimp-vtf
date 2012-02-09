@@ -111,9 +111,9 @@ msgstr "Use _layers as:"
 msgid "#format_title"
 msgstr "<b>Format:</b>"
 
-# %s: name of image
+# %s: name of XCF
 msgid "#window_title"
-msgstr "Exporting to %s"
+msgstr "Exporting %s to VTF"
 
 msgid "#missing_alpha_warning"
 msgstr "<b><big>Valve Texture Format Message</big></b>\n\n"

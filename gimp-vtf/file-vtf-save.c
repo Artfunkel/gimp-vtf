@@ -93,6 +93,8 @@ struct SaveSettingsManager
 	LayerGroup_t* cur;
 } layergroups;
 
+guint initial_lg = 0;
+
 gint select_vtf_format_index(const VtfSaveOptions_t* opt)
 {
 	if (opt->AdvancedSetup)
@@ -164,8 +166,9 @@ void create_vtf(gint32 layer_group, gboolean is_main_group);
 
 void save(gint nparams, const GimpParam* param, gint* nreturn_vals)
 {
-	gboolean* root_layer_visibility;
-	guint	i,num_to_export=0, num_exported=0;
+	gboolean*	root_layer_visibility;
+	gboolean	filename_cropped = FALSE;
+	guint		i,num_to_export=0, num_exported=0;
 	
 	run_mode	= (GimpRunMode)param[0].data.d_int32;
 	image_ID	= param[1].data.d_int32;
@@ -180,11 +183,41 @@ void save(gint nparams, const GimpParam* param, gint* nreturn_vals)
 			gint*	children;
 			gint	num_children;
 
+			// Only interested in layer groups *with children*
 			children = gimp_item_get_children(layer_IDs_root[i], &num_children);
 			g_free(children);
 
 			if (num_children)
+			{
 				layergroups.count++;
+
+				if (!filename_cropped)
+				{
+					// Test for the user exporting to a sub-VTF of this file (e.g. mytexture_normal.vtf) and adjust the filename
+					// so that things still line up
+
+					gchar	*lg_name, *filename_suffix;
+					gint	suffix_offset;
+
+					lg_name = gimp_item_get_name(layer_IDs_root[i]);
+					suffix_offset = (gint)strlen(lg_name) + 4;
+
+					if (suffix_offset <= strlen(filename))
+					{
+						filename_suffix = &filename[strlen(filename) - suffix_offset];
+				
+						if ( g_ascii_strncasecmp(filename_suffix,lg_name,suffix_offset - 4) == 0)
+						{
+							// overwrite "_<lg name>.vtf" with ".vtf"
+							memcpy(filename_suffix-1,".vtf\0",5);
+							initial_lg = layergroups.count - 1;
+							filename_cropped = TRUE;
+						}
+					}
+
+					g_free(lg_name);
+				}
+			}
 		}
 	}
 
@@ -232,7 +265,7 @@ void save(gint nparams, const GimpParam* param, gint* nreturn_vals)
 
 		children = gimp_item_get_children(layer_IDs_root[i], &num_children);
 		
-		if (num_children == 0)		
+		if (num_children == 0)
 			continue;
 
 		memset(layergroups.cur,0,sizeof(LayerGroup_t));
@@ -912,6 +945,7 @@ static void change_tab(GtkNotebook *notebook, gpointer page, guint page_num, gpo
 
 static void toggle_export(GtkToggleButton *togglebutton, gpointer user_data )
 {
+	// This control is displayed in tab headers. The target LG might not be the current one, hence the use of user_data.
 	LayerGroup_t* LG = (LayerGroup_t*)user_data;
 
 	LG->VtfOpt.Enabled = gtk_toggle_button_get_active(togglebutton);
@@ -955,12 +989,17 @@ static gboolean show_options(const gint32 image_ID)
 
 	} columns[FORMAT_COLUMN_COUNT];
 
-	gchar*	title;
+	gchar*	title, *xcf_name;
 	gint	title_len;
 
-	title_len = (gint)(strlen(_("#window_title")) + strlen(strrchr(filename,'\\')+1));
+	xcf_name = gimp_image_get_name(image_ID);
+	xcf_name[strlen(xcf_name) - 4] = 0;
+
+	title_len = (gint)(strlen(_("#window_title")) + strlen(xcf_name));
 	title = g_new(gchar,title_len);
-	snprintf(title,title_len,_("#window_title"), strrchr(filename,'\\')+1);
+	snprintf(title,title_len,_("#window_title"), xcf_name);
+
+	g_free(xcf_name);
 	
 	dialog = gimp_dialog_new (title, PLUG_IN_BINARY, NULL, (GtkDialogFlags)0,
 	
@@ -1023,11 +1062,11 @@ static gboolean show_options(const gint32 image_ID)
 		tab_padding = dummy_lg == -1 ? 6 : 0;
 
 		Tab = &layergroups.cur->UI;
+
+		// ------------ TAB LABEL --------------
 			
 		Tab->Label = gtk_hbox_new(FALSE,0);
-		{
-			gtk_widget_set_tooltip_text( Tab->Label, layergroups.cur->filename );
-		}
+		gtk_widget_set_tooltip_text( Tab->Label, layergroups.cur->filename );
 			
 		// Export checkbox
 		// FIXME: can't be selected with keyboard in this location...arguably a GTK bug though
@@ -1053,20 +1092,37 @@ static gboolean show_options(const gint32 image_ID)
 		gtk_box_pack_start (GTK_BOX(Tab->Label), label_text,TRUE,FALSE,6);
 		gtk_widget_show (label_text);
 
-		// ------------ CONFIGURATION TAB --------------
+		// ------------ TAB CONTENTS --------------
 
-		// Tab padding
+		// Pad, align
 		Tab->Page = gtk_alignment_new (0.5, 0, 1, 0);
 		gtk_widget_show (Tab->Page);
 		gtk_alignment_set_padding (GTK_ALIGNMENT(Tab->Page), tab_padding, tab_padding, tab_padding, tab_padding);
-
-		// Tab vertical box
 		column_vbox = gtk_vbox_new (FALSE, 6);		
 		gtk_widget_show (column_vbox);
 		gtk_container_add (GTK_CONTAINER(Tab->Page), column_vbox);
 
 		// Add the tab to the notebook
 		gtk_notebook_append_page(GTK_NOTEBOOK(LayerGroupNotebook),Tab->Page,Tab->Label);
+
+		// Destination filename
+		if (dummy_lg == -1)
+		{
+			gint	len;
+			gchar*	filename_markup;
+			
+			len = (gint)strlen(layergroups.cur->filename) + 8;
+			filename_markup = g_new(gchar,len);
+			snprintf(filename_markup,len,"<i>%s</i>",layergroups.cur->filename);
+
+			cur_label = gtk_label_new(filename_markup);
+			gtk_label_set_use_markup(GTK_LABEL(cur_label),TRUE);
+
+			g_free(filename_markup);
+
+			gtk_container_add (GTK_CONTAINER (column_vbox), cur_label);
+			gtk_widget_show(cur_label);
+		}
 		
 		// Format selection	
 		cur_align = gtk_alignment_new(0,0,0,0);
@@ -1291,20 +1347,14 @@ static gboolean show_options(const gint32 image_ID)
 		Tab->AlphaLayerEnable = gtk_check_button_new();
 		gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (Tab->AlphaLayerEnable), layergroups.cur->VtfOpt.AlphaLayerTattoo);
 		gtk_widget_show(Tab->AlphaLayerEnable);
-		gtk_container_add (GTK_CONTAINER (cur_hbox), Tab->AlphaLayerEnable);
-		gtk_box_set_child_packing(GTK_BOX(cur_hbox),Tab->AlphaLayerEnable,FALSE,TRUE,2,GTK_PACK_START);
+		gtk_box_pack_start(GTK_BOX(cur_hbox),Tab->AlphaLayerEnable,FALSE,TRUE,2);
 			
 		// Selection combo
 		Tab->AlphaLayerCombo = gimp_layer_combo_box_new(alpha_channel_suitable, (void*)&image_ID);
 		gtk_widget_show(Tab->AlphaLayerCombo);
 		gtk_container_add (GTK_CONTAINER (cur_hbox), Tab->AlphaLayerCombo);
 		if (layergroups.cur->VtfOpt.AlphaLayerTattoo)
-			gimp_int_combo_box_set_active( GIMP_INT_COMBO_BOX(Tab->AlphaLayerCombo), gimp_image_get_layer_by_tattoo(image_ID,layergroups.cur->VtfOpt.AlphaLayerTattoo) );		
-			
-			
-		// Configure feature availability
-		update_lod_availability();
-		update_alpha_layer_availability();
+			gimp_int_combo_box_set_active( GIMP_INT_COMBO_BOX(Tab->AlphaLayerCombo), gimp_image_get_layer_by_tattoo(image_ID,layergroups.cur->VtfOpt.AlphaLayerTattoo) );					
 	}
 
 	for (LAYERGROUPS_ITERATE)
@@ -1324,25 +1374,29 @@ static gboolean show_options(const gint32 image_ID)
 		g_signal_connect(Tab->BumpType,				"changed",		G_CALLBACK(choose_bump_type),			NULL);
 		g_signal_connect(Tab->LODControlSlider,		"format-value",	G_CALLBACK(change_lod_control),			NULL);
 		g_signal_connect(Tab->AlphaLayerEnable,		"toggled",		G_CALLBACK(toggle_alpha_layer),			NULL);
-		g_signal_connect(Tab->AlphaLayerCombo,		"changed",		G_CALLBACK(choose_alpha_layer),		NULL);
+		g_signal_connect(Tab->AlphaLayerCombo,		"changed",		G_CALLBACK(choose_alpha_layer),			NULL);
 
 		{
 			GtkTreeSelection* selection = gtk_tree_view_get_selection(GTK_TREE_VIEW(Tab->FormatsView));
 			gtk_tree_selection_set_mode(selection,GTK_SELECTION_BROWSE);
 			g_signal_connect(selection, "changed", GTK_SIGNAL_FUNC(select_compression), NULL);
 		}
-
+		
+		// Configure feature availability
+		update_lod_availability();
+		update_alpha_layer_availability();
 		change_format_select_mode(GTK_TOGGLE_BUTTON(Tab->AdvancedToggle),NULL);
+		toggle_export(GTK_TOGGLE_BUTTON(Tab->ExportCheckbox),layergroups.cur);
 	}
 
-	layergroups.cur = layergroups.head;
+	gtk_notebook_set_current_page(GTK_NOTEBOOK(LayerGroupNotebook),initial_lg);
 	
 	// Render window
-	gtk_widget_show (dialog);
+	gtk_widget_show(dialog);
 
-	run = (gimp_dialog_run (GIMP_DIALOG (dialog)) == GTK_RESPONSE_OK);
+	run = gimp_dialog_run(GIMP_DIALOG(dialog)) == GTK_RESPONSE_OK;
 
-	gtk_widget_destroy (dialog);
+	gtk_widget_destroy(dialog);
 
 	return run;
 }
