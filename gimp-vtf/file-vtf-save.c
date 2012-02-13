@@ -16,6 +16,9 @@
 
 #define LAYERGROUPS_ITERATE layergroups.cur = layergroups.head; layergroups.cur < layergroups.head + layergroups.count; layergroups.cur++
 
+gboolean vtf_set_data();
+gboolean vtf_get_data();
+
 /*
  * Logic
  */
@@ -188,36 +191,7 @@ void save(gint nparams, const GimpParam* param, gint* nreturn_vals)
 			g_free(children);
 
 			if (num_children)
-			{
 				layergroups.count++;
-
-				if (!filename_cropped)
-				{
-					// Test for the user exporting to a sub-VTF of this file (e.g. mytexture_normal.vtf) and adjust the filename
-					// so that things still line up
-
-					gchar	*lg_name, *filename_suffix;
-					gint	suffix_offset;
-
-					lg_name = gimp_item_get_name(layer_IDs_root[i]);
-					suffix_offset = (gint)strlen(lg_name) + 4;
-
-					if (suffix_offset <= strlen(filename))
-					{
-						filename_suffix = &filename[strlen(filename) - suffix_offset];
-				
-						if ( g_ascii_strncasecmp(filename_suffix,lg_name,suffix_offset - 4) == 0)
-						{
-							// overwrite "_<lg name>.vtf" with ".vtf"
-							memcpy(filename_suffix-1,".vtf\0",5);
-							initial_lg = layergroups.count - 1;
-							filename_cropped = TRUE;
-						}
-					}
-
-					g_free(lg_name);
-				}
-			}
 		}
 	}
 
@@ -311,6 +285,30 @@ void save(gint nparams, const GimpParam* param, gint* nreturn_vals)
 
 		// Names
 		layergroups.cur->name = gimp_item_get_name(layergroups.cur->ID);
+
+		if (!filename_cropped && !layergroups.cur->is_main)
+		{
+			// Test for the user exporting to a sub-VTF of this file (e.g. mytexture_normal.vtf) and adjust the filename
+			// so that things still line up
+
+			gchar	*filename_suffix;
+			gint	suffix_offset;
+
+			suffix_offset = (gint)strlen(layergroups.cur->name);
+
+			if (suffix_offset <= strlen(filename))
+			{
+				filename_suffix = &filename[strlen(filename) - suffix_offset];
+				
+				if ( g_ascii_strncasecmp(filename_suffix,layergroups.cur->name,suffix_offset) == 0)
+				{
+					// trim "_<lg name>"
+					*(filename_suffix-1) = 0;
+					initial_lg = (guint)(layergroups.cur - layergroups.head);
+					filename_cropped = TRUE;
+				}
+			}
+		}
 		
 		if (layergroups.cur->is_main)
 		{
@@ -332,25 +330,12 @@ void save(gint nparams, const GimpParam* param, gint* nreturn_vals)
 		
 		g_free(path_mixed);
 			
-		// Load last settings
-		gimp_get_data( (gchar*)get_vtf_options_ID(dummy_lg == -1 ? layergroups.cur->tattoo : 0), &layergroups.cur->VtfOpt );
-
-		if ( fix_alpha_layer(&layergroups.cur->VtfOpt,image_ID) )
-		{
-			GtkWidget* MessageBox;
-			MessageBox = gtk_message_dialog_new(NULL,(GtkDialogFlags)0,GTK_MESSAGE_WARNING,GTK_BUTTONS_OK,NULL);
-			gtk_message_dialog_set_markup(GTK_MESSAGE_DIALOG(MessageBox),_("#missing_alpha_warning"));
-			gtk_window_set_position(GTK_WINDOW(MessageBox),GTK_WIN_POS_CENTER);
-
-			gtk_widget_show(MessageBox);
-			gtk_dialog_run( GTK_DIALOG(MessageBox) );
-			gtk_widget_destroy (MessageBox);
-
-			run_mode = GIMP_RUN_INTERACTIVE;
-		}
 		layergroups.cur++;
 	}
 	filename[strlen(filename)] = '.';
+
+	// Load last VTF save settings
+	vtf_get_data();
 
 	if (layergroups.count == 0)
 	{
@@ -413,11 +398,11 @@ void save(gint nparams, const GimpParam* param, gint* nreturn_vals)
 		return;
 	}
 	
+	if (run_mode == GIMP_RUN_INTERACTIVE)
+		vtf_set_data();
+
 	for (LAYERGROUPS_ITERATE)
 	{
-		if (run_mode == GIMP_RUN_INTERACTIVE)
-				gimp_set_data( get_vtf_options_ID(dummy_lg == -1 ? layergroups.cur->tattoo : 0), &layergroups.cur->VtfOpt, sizeof (VtfSaveOptions_t));
-
 		if (layergroups.cur->VtfOpt.Enabled)
 			num_to_export++;
 	}
@@ -931,11 +916,14 @@ static gboolean alpha_channel_suitable(gint32 image_id, gint32 drawable_id, gpoi
 	return drawable_id != layergroups.cur->ID && *(gint32*)user_data == image_id;
 }
 
+// Actually called whenever the control is drawn!
 static gchar* change_lod_control(GtkScale* scale, gdouble value, gpointer user_data)
-{	
-	layergroups.cur->VtfOpt.LodControlU = exponentU - (gint)value;
-	layergroups.cur->VtfOpt.LodControlV = exponentV - (gint)value;
-	return g_strdup_printf("%ix%i", (gint)pow(2.0f,(int)layergroups.cur->VtfOpt.LodControlU), (gint)pow(2.0f,(int)layergroups.cur->VtfOpt.LodControlV) ); // casting to hide bogus Intellisense warnings
+{
+	LayerGroup_t* lg = (LayerGroup_t*)user_data;
+
+	lg->VtfOpt.LodControlU = exponentU - (gint)value;
+	lg->VtfOpt.LodControlV = exponentV - (gint)value;
+	return g_strdup_printf("%ix%i", (gint)pow(2.0f,(int)lg->VtfOpt.LodControlU), (gint)pow(2.0f,(int)lg->VtfOpt.LodControlV) ); // casting to hide bogus Intellisense warnings
 }
 
 static void change_tab(GtkNotebook *notebook, gpointer page, guint page_num, gpointer user_data)
@@ -943,9 +931,9 @@ static void change_tab(GtkNotebook *notebook, gpointer page, guint page_num, gpo
 	layergroups.cur = layergroups.head + page_num;
 }
 
+// This control is displayed in tab headers. The target LG might not be the current one, hence the use of user_data.
 static void toggle_export(GtkToggleButton *togglebutton, gpointer user_data )
 {
-	// This control is displayed in tab headers. The target LG might not be the current one, hence the use of user_data.
 	LayerGroup_t* LG = (LayerGroup_t*)user_data;
 
 	LG->VtfOpt.Enabled = gtk_toggle_button_get_active(togglebutton);
@@ -989,27 +977,26 @@ static gboolean show_options(const gint32 image_ID)
 
 	} columns[FORMAT_COLUMN_COUNT];
 
-	gchar*	title, *xcf_name;
-	gint	title_len;
+	{
+		gchar*	title, *xcf_name;
+		gint	title_len;
 
-	xcf_name = gimp_image_get_name(image_ID);
-	xcf_name[strlen(xcf_name) - 4] = 0;
+		xcf_name = gimp_image_get_name(image_ID);
+		xcf_name[strlen(xcf_name) - 4] = 0;
 
-	title_len = (gint)(strlen(_("#window_title")) + strlen(xcf_name));
-	title = g_new(gchar,title_len);
-	snprintf(title,title_len,_("#window_title"), xcf_name);
+		title_len = (gint)(strlen(_("#window_title")) + strlen(xcf_name));
+		title = g_new(gchar,title_len);
+		snprintf(title,title_len,_("#window_title"), xcf_name);
 
-	g_free(xcf_name);
-	
-	dialog = gimp_dialog_new (title, PLUG_IN_BINARY, NULL, (GtkDialogFlags)0,
-	
-	HELP_FUNC,			"file-vtf",
-	GTK_STOCK_CANCEL,	GTK_RESPONSE_CANCEL,
-	GTK_STOCK_OK,		GTK_RESPONSE_OK,
+		dialog = gimp_dialog_new(title, PLUG_IN_BINARY, NULL, (GtkDialogFlags)0,	
+									HELP_FUNC,			"file-vtf",
+									GTK_STOCK_CANCEL,	GTK_RESPONSE_CANCEL,
+									GTK_STOCK_OK,		GTK_RESPONSE_OK,
+									NULL);
 
-	NULL);
-
-	g_free(title);
+		g_free(xcf_name);
+		g_free(title);
+	}
 
 	gtk_window_set_resizable(GTK_WINDOW(dialog),FALSE);
 	gtk_window_set_position(GTK_WINDOW(dialog),GTK_WIN_POS_CENTER);
@@ -1161,7 +1148,7 @@ static gboolean show_options(const gint32 image_ID)
 		cur_hbox = gtk_hbox_new(FALSE,0);
 		gtk_container_add (GTK_CONTAINER (column_vbox), cur_hbox);
 		gtk_widget_show(cur_hbox);
-			
+
 		// Simple format selection
 		Tab->SimpleFormatContainer = gtk_hbox_new(FALSE,0);
 		gtk_container_add (GTK_CONTAINER (cur_hbox), Tab->SimpleFormatContainer);
@@ -1327,7 +1314,7 @@ static gboolean show_options(const gint32 image_ID)
 		//----------------------------
 		// Use layer as alpha channel
 		//----------------------------
-	
+
 		cur_align = gtk_alignment_new(0,0.5,0,0);
 		gtk_container_add (GTK_CONTAINER (column_vbox), cur_align);
 		gtk_widget_show(cur_align);
@@ -1368,19 +1355,19 @@ static gboolean show_options(const gint32 image_ID)
 		g_signal_connect(Tab->WithAlpha,			"toggled",		G_CALLBACK(choose_simple_alpha),		NULL);
 		g_signal_connect(Tab->AdvancedToggle,		"toggled",		G_CALLBACK(change_format_select_mode),	NULL);
 		g_signal_connect(Tab->VtfVersion,			"changed",		G_CALLBACK(choose_vtf_version),			NULL);
-		g_signal_connect(Tab->DoMips,				"toggled",		G_CALLBACK(change_withmips),			NULL);
+		g_signal_connect(Tab->DoMips,				"toggled",		G_CALLBACK(change_withmips),			NULL);		
 		g_signal_connect(Tab->NoLOD,				"toggled",		G_CALLBACK(change_nolod),				NULL);
 		g_signal_connect(Tab->Clamp,				"toggled",		G_CALLBACK(gimp_toggle_button_update),	&layergroups.cur->VtfOpt.Clamp);
 		g_signal_connect(Tab->BumpType,				"changed",		G_CALLBACK(choose_bump_type),			NULL);
-		g_signal_connect(Tab->LODControlSlider,		"format-value",	G_CALLBACK(change_lod_control),			NULL);
+		g_signal_connect(Tab->LODControlSlider,		"format-value",	G_CALLBACK(change_lod_control),			layergroups.cur);
 		g_signal_connect(Tab->AlphaLayerEnable,		"toggled",		G_CALLBACK(toggle_alpha_layer),			NULL);
 		g_signal_connect(Tab->AlphaLayerCombo,		"changed",		G_CALLBACK(choose_alpha_layer),			NULL);
-
+		
 		{
 			GtkTreeSelection* selection = gtk_tree_view_get_selection(GTK_TREE_VIEW(Tab->FormatsView));
 			gtk_tree_selection_set_mode(selection,GTK_SELECTION_BROWSE);
 			g_signal_connect(selection, "changed", GTK_SIGNAL_FUNC(select_compression), NULL);
-		}
+		}		
 		
 		// Configure feature availability
 		update_lod_availability();
@@ -1399,4 +1386,50 @@ static gboolean show_options(const gint32 image_ID)
 	gtk_widget_destroy(dialog);
 
 	return run;
+}
+
+gboolean vtf_get_data()
+{
+	for(LAYERGROUPS_ITERATE)
+	{
+		gchar* identifier;
+		gboolean result;
+
+		identifier = g_new(gchar,10);
+		snprintf(identifier,10,"%i",dummy_lg == -1 ? layergroups.cur->tattoo : 0);
+
+		result = gimp_get_data(identifier,&layergroups.cur->VtfOpt);
+
+		g_free(identifier);
+		if (!result)
+			return FALSE;
+
+		if ( fix_alpha_layer(&layergroups.cur->VtfOpt,image_ID) )
+		{
+			gimp_message(_("#missing_alpha_warning"));
+			run_mode = GIMP_RUN_INTERACTIVE;
+		}
+	}
+
+	return TRUE;
+}
+
+gboolean vtf_set_data()
+{
+	for(LAYERGROUPS_ITERATE)
+	{
+		gchar* identifier;
+		gboolean result;
+
+		identifier = g_new(gchar,10);
+		snprintf(identifier,10,"%i",dummy_lg == -1 ? layergroups.cur->tattoo : 0);
+
+		result = gimp_set_data(identifier, &layergroups.cur->VtfOpt, sizeof(VtfSaveOptions_t));
+
+		g_free(identifier);
+		if (!result)
+			return FALSE;
+	}
+
+	return TRUE;
 }
