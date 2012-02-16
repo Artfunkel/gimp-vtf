@@ -156,11 +156,11 @@ void remove_dummy_lg()
 	if (dummy_lg != -1)
 	{
 		guint i;
-		for (i = 0; i < layergroups.cur->children_count; i++)
+		for (i = 0; i < layergroups.head->children_count; i++)
 		{
-			gimp_image_reorder_item(image_ID,layergroups.cur->children[i],0,0);
+			gimp_image_reorder_item(image_ID,layergroups.head->children[i],0,0);
 		}
-		gimp_image_remove_layer(image_ID,layergroups.cur->ID);
+		gimp_image_remove_layer(image_ID,layergroups.head->ID);
 	}
 }
 
@@ -1388,21 +1388,92 @@ static gboolean show_options(const gint32 image_ID)
 	return run;
 }
 
+gint32 vtf_get_data_tattoo()
+{
+	return dummy_lg == -1 ? layergroups.cur->tattoo : gimp_item_get_tattoo(image_ID);
+}
+
+gchar* vtf_get_data_id()
+{
+	gchar* identifier;
+	identifier = g_new(gchar,10);
+
+	snprintf( identifier,10,"%i",vtf_get_data_tattoo() );
+
+	return identifier;
+}
+
+gchar* vtf_get_settings_path()
+{
+	gchar* image_path;
+	gchar* settings_path;
+	guint settings_path_len;
+
+	image_path = gimp_image_get_filename(image_ID);
+	
+	if (!image_path)
+		return NULL;
+
+	*strrchr(image_path,'.') = 0;
+
+	settings_path_len = (guint)strlen(image_path) + 18;
+	settings_path = g_new(gchar,settings_path_len);
+
+	snprintf(settings_path,settings_path_len,"%s.gimpvtf-settings",image_path);
+
+	g_free(image_path);
+
+	return settings_path;
+}
+
 gboolean vtf_get_data()
 {
+	FILE* settings = 0;
+	gchar* settings_path = vtf_get_settings_path();
+
+	if (settings_path)
+	{		
+		settings = fopen(settings_path,"rb");
+		g_free(settings_path);
+	}
+
 	for(LAYERGROUPS_ITERATE)
 	{
 		gchar* identifier;
 		gboolean result;
 
-		identifier = g_new(gchar,10);
-		snprintf(identifier,10,"%i",dummy_lg == -1 ? layergroups.cur->tattoo : 0);
-
+		identifier = vtf_get_data_id();
 		result = gimp_get_data(identifier,&layergroups.cur->VtfOpt);
-
 		g_free(identifier);
+
 		if (!result)
-			return FALSE;
+		{
+			if (settings)
+			{
+				fseek(settings,0,SEEK_SET);
+				while( !feof(settings) )
+				{
+					gint32	candidate_tattoo;
+					guint	data_size;
+					
+					fread(&candidate_tattoo,sizeof(gint32),1,settings);
+					fread(&data_size,sizeof(guint),1,settings);
+					
+					if ( candidate_tattoo == vtf_get_data_tattoo() )
+					{
+						result = (gboolean)fread(&layergroups.cur->VtfOpt,sizeof(VtfSaveOptions_t),1,settings);
+						break;
+					}
+					else
+					{
+						if (data_size)
+							fseek(settings,data_size,SEEK_CUR);
+						else
+							break;
+					}
+				}
+			}
+		}
 
 		if ( fix_alpha_layer(&layergroups.cur->VtfOpt,image_ID) )
 		{
@@ -1411,25 +1482,46 @@ gboolean vtf_get_data()
 		}
 	}
 
+	if (settings)
+		fclose(settings);
 	return TRUE;
 }
 
 gboolean vtf_set_data()
 {
+	FILE* settings = 0;
+	gchar* settings_path = vtf_get_settings_path();
+
+	if (settings_path)
+	{		
+		settings = fopen(settings_path,"wb");
+		g_free(settings_path);
+	}
+
 	for(LAYERGROUPS_ITERATE)
 	{
 		gchar* identifier;
 		gboolean result;
 
-		identifier = g_new(gchar,10);
-		snprintf(identifier,10,"%i",dummy_lg == -1 ? layergroups.cur->tattoo : 0);
-
+		identifier = vtf_get_data_id();
 		result = gimp_set_data(identifier, &layergroups.cur->VtfOpt, sizeof(VtfSaveOptions_t));
 
 		g_free(identifier);
-		if (!result)
-			return FALSE;
-	}
 
+		if (settings)
+		{
+			gint32	tattoo;
+			guint	data_size = sizeof(VtfSaveOptions_t);
+			
+			tattoo = vtf_get_data_tattoo();
+
+			fwrite(&tattoo,sizeof(gint32),1,settings);
+			fwrite(&data_size,sizeof(guint),1,settings);
+			fwrite(&layergroups.cur->VtfOpt,data_size,1,settings);
+		}
+	}
+	
+	if (settings)
+		fclose(settings);
 	return TRUE;
 }
