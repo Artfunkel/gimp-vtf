@@ -1414,12 +1414,10 @@ gchar* vtf_get_settings_path()
 	if (!image_path)
 		return NULL;
 
-	*strrchr(image_path,'.') = 0;
-
 	settings_path_len = (guint)strlen(image_path) + 18;
 	settings_path = g_new(gchar,settings_path_len);
 
-	snprintf(settings_path,settings_path_len,"%s.gimpvtf-settings",image_path);
+	snprintf(settings_path,settings_path_len,"%s.vtf-settings",image_path);
 
 	g_free(image_path);
 
