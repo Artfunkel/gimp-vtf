@@ -943,14 +943,10 @@ static void toggle_export(GtkToggleButton *togglebutton, gpointer user_data )
 }
 
 #ifdef _WIN32
-#include "windows.h"
-#define HELP_FUNC vtf_help
-void vtf_help(const gchar* help_id, gpointer help_data)
-{
-	ShellExecute(0,"open","http://developer.valvesoftware.com/wiki/Valve_Texture_Format",0,0,0);
-}
+	#define HELP_FUNC vtf_help
+	void vtf_help(const gchar* help_id, gpointer help_data);
 #else
-#define HELP_FUNC gimp_standard_help_func // no good way of opening an arbitrary URL outside Windows
+	#define HELP_FUNC gimp_standard_help_func // no good way of opening an arbitrary URL outside Windows
 #endif
 
 
@@ -1430,8 +1426,12 @@ gboolean vtf_get_data()
 	gchar* settings_path = vtf_get_settings_path();
 
 	if (settings_path)
-	{		
+	{
+#ifdef _WIN32
+		fopen_s(&settings,settings_path,"rb");
+#else
 		settings = fopen(settings_path,"rb");
+#endif
 		g_free(settings_path);
 	}
 
@@ -1459,7 +1459,7 @@ gboolean vtf_get_data()
 					
 					if ( candidate_tattoo == vtf_get_data_tattoo() )
 					{
-						result = (gboolean)fread(&layergroups.cur->VtfOpt,sizeof(VtfSaveOptions_t),1,settings);
+						result = (gboolean)fread(&layergroups.cur->VtfOpt,min(data_size,sizeof(VtfSaveOptions_t)),1,settings);
 						break;
 					}
 					else
@@ -1492,7 +1492,11 @@ gboolean vtf_set_data()
 
 	if (settings_path)
 	{		
+#ifdef _WIN32
+		fopen_s(&settings,settings_path,"wb");
+#else
 		settings = fopen(settings_path,"wb");
+#endif
 		g_free(settings_path);
 	}
 

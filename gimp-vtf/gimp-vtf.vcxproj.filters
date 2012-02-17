@@ -86,6 +86,9 @@
     <ClCompile Include="file-vtf-save.c">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="winstuff.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="file-vtf.h">

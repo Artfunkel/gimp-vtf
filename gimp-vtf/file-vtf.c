@@ -15,11 +15,10 @@
 #include <libgimp/gimpui.h>
 #endif
 
-#include "windows.h"
-#include "resources.h"
-
 #define COPYRIGHT    "Tom Edwards (contact@steamreview.org)"
 #define RELEASE_DATE "February 2012"
+
+#define MAX_PATH 260
 
 static void query();
 static void run(const gchar* name, gint nparams, const GimpParam* param, gint* nreturn_vals, GimpParam** return_vals);
@@ -139,16 +138,16 @@ void save(gint nparams, const GimpParam* param, gint* nreturn_vals);
 void load(gint nparams, const GimpParam* param, gint* nreturn_vals, gboolean thumb);
 void remove_dummy_lg();
 
+#ifdef _WIN32
+void install_locale(gboolean saving);
+void register_filetype();
+#endif
+
 static void run(const gchar* name, gint nparams, const GimpParam* param, gint* nreturn_vals, GimpParam** return_vals)
 {
-	char plugin_dir[MAX_PATH];
-	char plugin_locale_dir[MAX_PATH];
 	vlUInt vtf_bindcode = 0;
-
-	image_ID = -1;	
-	snprintf(plugin_dir,MAX_PATH,"%s\\plug-ins",gimp_directory());
-	snprintf(plugin_locale_dir,MAX_PATH,"%s\\locale",plugin_dir);
-			
+	image_ID = -1;
+	
 #ifdef _DEBUG
 	{
 		// Poor man's JIT debugger!
@@ -165,63 +164,16 @@ static void run(const gchar* name, gint nparams, const GimpParam* param, gint* n
 		gtk_widget_destroy (MessageBox);
 	}
 #endif
+	
+	plugin_dir = g_new(gchar,MAX_PATH);
+	snprintf(plugin_dir,MAX_PATH,"%s\\plug-ins",gimp_directory());
+	plugin_locale_dir = g_new(gchar,MAX_PATH);
+	snprintf(plugin_locale_dir,MAX_PATH,"%s\\locale",plugin_dir);
 
-	// Dipping into Windows API for .mo extraction	
-	{
-		HRSRC en_mo;
-		HANDLE file = INVALID_HANDLE_VALUE;
-		char en_mo_out_filepath[MAX_PATH];
-		char cd[MAX_PATH];
-				
-		en_mo = FindResource(NULL, MAKEINTRESOURCE(MO_FILE_EN), MAKEINTRESOURCE(IDR_LOCALISATION) );
-		if (en_mo)
-		{
-			HGLOBAL en_mo_data = LoadResource(NULL,en_mo);
-			if (en_mo_data)
-			{
-				int i;
-				char* path_components[3] = { "locale", "en", "LC_MESSAGES" };
-
-				strcpy_s(cd,MAX_PATH,plugin_dir);
-
-				for(i=0; i < 3; i++)
-				{
-					snprintf(cd,MAX_PATH,"%s\\%s",cd,path_components[i]);
-					if ( !CreateDirectory(cd,NULL) && GetLastError() != ERROR_ALREADY_EXISTS )
-						break;
-				}
-				if (i == 3)
-				{
-					DWORD	file_attr;
-
-					snprintf(en_mo_out_filepath,MAX_PATH,"%s\\file-vtf.mo",cd);
-
-					file_attr = GetFileAttributes(en_mo_out_filepath);
-
-					if ( !(file_attr & FILE_ATTRIBUTE_READONLY) || file_attr == INVALID_FILE_ATTRIBUTES )
-					{
-						file = CreateFile(en_mo_out_filepath,GENERIC_WRITE,0,NULL,CREATE_ALWAYS,FILE_ATTRIBUTE_NORMAL,NULL);				
-						if (file != INVALID_HANDLE_VALUE )
-						{
-							DWORD size = SizeofResource(NULL,en_mo);
-							DWORD written = 0;
-							WriteFile(file,LockResource(en_mo_data),size,&written,0);
-							CloseHandle(file);
-						}
-					}
-				}
-				else
-					snprintf(en_mo_out_filepath,MAX_PATH,"%s",cd); // where we failed during directory creation
-
-				if (file == INVALID_HANDLE_VALUE && strcmp (name, SAVE_PROC) == 0)
-				{
-					char error_buf[128];
-					FormatMessage(FORMAT_MESSAGE_FROM_SYSTEM,NULL,GetLastError(),0,error_buf,128,0);
-					g_message("Could not extract English language database!\n\nPath: %s\n\nError: %s\n(If you are trying to prevent the file from being overwritten, set the \"read only\" flag.)",en_mo_out_filepath,error_buf);
-				}
-			}
-		}
-	}
+#ifdef _WIN32
+	install_locale(strcmp(name, SAVE_PROC) == 0);
+	register_filetype();
+#endif
 	
 	bindtextdomain( TEXT_DOMAIN, plugin_locale_dir );
 	textdomain(TEXT_DOMAIN);

@@ -34,6 +34,9 @@ static gint32		image_ID = -1;
 static GimpRunMode	run_mode = GIMP_RUN_INTERACTIVE;
 static gchar*		filename = 0;
 
+gchar* plugin_dir;
+gchar* plugin_locale_dir;
+
 vlBool IsPowerOfTwo(vlUInt uiSize);
 vlUInt NextPowerOfTwo(vlUInt uiSize);
 

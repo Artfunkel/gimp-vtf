@@ -190,6 +190,7 @@ copy  "C:\Users\Tom\Documents\Visual Studio 2010\Libraries\vtflib132\bin\x64\vtf
     <ClCompile Include="file-vtf-load.c" />
     <ClCompile Include="file-vtf.c" />
     <ClCompile Include="file-vtf-save.c" />
+    <ClCompile Include="winstuff.c" />
   </ItemGroup>
   <ItemGroup>
     <Library Include="..\..\..\Libraries\vtflib132\lib\x64\VTFLib.lib">
