@@ -147,6 +147,8 @@ static void run(const gchar* name, gint nparams, const GimpParam* param, gint* n
 {
 	vlUInt vtf_bindcode = 0;
 	image_ID = -1;
+	run_mode = GIMP_RUN_INTERACTIVE;
+	filename = 0;
 	
 #ifdef _DEBUG
 	{

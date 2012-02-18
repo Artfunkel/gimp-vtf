@@ -14,7 +14,6 @@
 void load(gint nparams, const GimpParam* param, gint* nreturn_vals, gboolean thumb)
 {
 	gint32			layer_ID;
-	gint32			image_ID;
 	GimpDrawable*	drawable;
 	GimpPixelRgn	pixel_rgn;
 
@@ -177,7 +176,7 @@ void load(gint nparams, const GimpParam* param, gint* nreturn_vals, gboolean thu
 				VTFImageFormat	format;
 				guint i;
 
-				memset(&gimpVtfOpt,0,sizeof(VtfSaveOptions_t));
+				gimpVtfOpt = DefaultSaveOptions;
 			
 				// Version
 				gimpVtfOpt.Version = vlImageGetMinorVersion();
@@ -267,7 +266,7 @@ void load(gint nparams, const GimpParam* param, gint* nreturn_vals, gboolean thu
 				}
 
 				// Store
-				gimp_set_data (get_vtf_options_ID(0), &gimpVtfOpt, sizeof (VtfSaveOptions_t));
+				gimp_set_data (vtf_get_data_id(FALSE), &gimpVtfOpt, sizeof (VtfSaveOptions_t));
 			}
 		}
 

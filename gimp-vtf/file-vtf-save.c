@@ -94,7 +94,7 @@ struct SaveSettingsManager
 
 	LayerGroup_t* head;
 	LayerGroup_t* cur;
-} layergroups;
+} layergroups = { 0, 0, 0 };
 
 guint initial_lg = 0;
 
@@ -292,9 +292,9 @@ void save(gint nparams, const GimpParam* param, gint* nreturn_vals)
 			// so that things still line up
 
 			gchar	*filename_suffix;
-			gint	suffix_offset;
+			guint	suffix_offset;
 
-			suffix_offset = (gint)strlen(layergroups.cur->name);
+			suffix_offset = (guint)strlen(layergroups.cur->name);
 
 			if (suffix_offset <= strlen(filename))
 			{
@@ -333,6 +333,7 @@ void save(gint nparams, const GimpParam* param, gint* nreturn_vals)
 		layergroups.cur++;
 	}
 	filename[strlen(filename)] = '.';
+	layergroups.cur = layergroups.head;
 
 	// Load last VTF save settings
 	vtf_get_data();
@@ -587,11 +588,11 @@ void create_vtf(gint32 layer_group, gboolean is_main_group)
 	// Progress meter...unfortunately, VTFLib won't tell us its internal progress
 	if (layergroups.cur->VtfOpt.LayerUse == VTF_MERGE_VISIBLE)
 		if (layergroups.cur->children_count == 1)
-			gimp_progress_set_text_printf(_("#save_message_single"),layergroups.cur->name);
+			gimp_progress_set_text_printf(_("#save_message_single"),layergroups.cur->filename);
 		else
-			gimp_progress_set_text_printf(_("#save_message_combined"),layergroups.cur->name);
+			gimp_progress_set_text_printf(_("#save_message_combined"),layergroups.cur->filename);
 	else
-		gimp_progress_set_text_printf(_("#save_message_multi"),layergroups.cur->name,layergroups.cur->children_count,progress_frame_label);
+		gimp_progress_set_text_printf(_("#save_message_multi"),layergroups.cur->filename,layergroups.cur->children_count,progress_frame_label);
 	
 	g_assert(layergroups.cur->children_count);
 
@@ -978,7 +979,8 @@ static gboolean show_options(const gint32 image_ID)
 		gint	title_len;
 
 		xcf_name = gimp_image_get_name(image_ID);
-		xcf_name[strlen(xcf_name) - 4] = 0;
+		if ( xcf_name[strlen(xcf_name) - 4] == '.')
+			xcf_name[strlen(xcf_name) - 4] = 0;
 
 		title_len = (gint)(strlen(_("#window_title")) + strlen(xcf_name));
 		title = g_new(gchar,title_len);
@@ -1039,6 +1041,8 @@ static gboolean show_options(const gint32 image_ID)
 	{
 		GtkWidget*	label_frame;
 		GtkWidget*	label_text;
+		gchar*		label_text_buffer;
+		gint		label_text_buffer_len;
 		TabControls_t* Tab;
 		gint		tab_padding;
 
@@ -1071,9 +1075,22 @@ static gboolean show_options(const gint32 image_ID)
 		gtk_widget_show (Tab->Icon);
 
 		// Text
-		label_text = gtk_label_new(layergroups.cur->name);
+		if (layergroups.cur->is_main)
+		{
+			label_text_buffer_len = (gint)strlen(layergroups.cur->name) + 8;
+			label_text_buffer = g_new(gchar,label_text_buffer_len);
+			snprintf(label_text_buffer,label_text_buffer_len,"<u>%s</u>",layergroups.cur->name);
+		}
+		else
+			label_text_buffer = (gchar*)layergroups.cur->name;
+
+		label_text = gtk_label_new( label_text_buffer );
+		gtk_label_set_use_markup(GTK_LABEL(label_text),TRUE);
 		gtk_box_pack_start (GTK_BOX(Tab->Label), label_text,TRUE,FALSE,6);
 		gtk_widget_show (label_text);
+
+		if (layergroups.cur->is_main)
+			g_free(label_text_buffer);
 
 		// ------------ TAB CONTENTS --------------
 
@@ -1373,6 +1390,7 @@ static gboolean show_options(const gint32 image_ID)
 	}
 
 	gtk_notebook_set_current_page(GTK_NOTEBOOK(LayerGroupNotebook),initial_lg);
+	layergroups.cur = layergroups.head + initial_lg; // no callback from set_current_page if there's only one page
 	
 	// Render window
 	gtk_widget_show(dialog);
@@ -1384,17 +1402,19 @@ static gboolean show_options(const gint32 image_ID)
 	return run;
 }
 
-gint32 vtf_get_data_tattoo()
+gint32 vtf_get_data_tattoo(gboolean settings_file)
 {
-	return dummy_lg == -1 ? layergroups.cur->tattoo : gimp_item_get_tattoo(image_ID);
+	// GIMP data identifiers need to be unique to the image.
+	// Settings file identifiers need to be the same every time.
+	return dummy_lg == -1 && layergroups.count > 0 ? layergroups.cur->tattoo : (settings_file? -1 : -image_ID);
 }
 
-gchar* vtf_get_data_id()
+gchar* vtf_get_data_id(gboolean settings_file)
 {
 	gchar* identifier;
-	identifier = g_new(gchar,10);
+	identifier = g_new(gchar,13);
 
-	snprintf( identifier,10,"%i",vtf_get_data_tattoo() );
+	snprintf( identifier,13,"vtf%i",vtf_get_data_tattoo(settings_file) );
 
 	return identifier;
 }
@@ -1407,7 +1427,7 @@ gchar* vtf_get_settings_path()
 
 	image_path = gimp_image_get_filename(image_ID);
 	
-	if (!image_path)
+	if (!image_path || g_ascii_strncasecmp(".xcf", strrchr(image_path,'.'), 4) != 0)
 		return NULL;
 
 	settings_path_len = (guint)strlen(image_path) + 18;
@@ -1440,7 +1460,7 @@ gboolean vtf_get_data()
 		gchar* identifier;
 		gboolean result;
 
-		identifier = vtf_get_data_id();
+		identifier = vtf_get_data_id(FALSE);
 		result = gimp_get_data(identifier,&layergroups.cur->VtfOpt);
 		g_free(identifier);
 
@@ -1449,7 +1469,7 @@ gboolean vtf_get_data()
 			if (settings)
 			{
 				fseek(settings,0,SEEK_SET);
-				while( !feof(settings) )
+				while( !feof(settings) && !ferror(settings) )
 				{
 					gint32	candidate_tattoo;
 					guint	data_size;
@@ -1457,7 +1477,7 @@ gboolean vtf_get_data()
 					fread(&candidate_tattoo,sizeof(gint32),1,settings);
 					fread(&data_size,sizeof(guint),1,settings);
 					
-					if ( candidate_tattoo == vtf_get_data_tattoo() )
+					if ( candidate_tattoo == vtf_get_data_tattoo(TRUE) )
 					{
 						result = (gboolean)fread(&layergroups.cur->VtfOpt,min(data_size,sizeof(VtfSaveOptions_t)),1,settings);
 						break;
@@ -1465,7 +1485,10 @@ gboolean vtf_get_data()
 					else
 					{
 						if (data_size)
-							fseek(settings,data_size,SEEK_CUR);
+						{
+							fseek(settings,data_size-1,SEEK_CUR);
+							fgetc(settings); // generate eof/error flag...surely this isn't right
+						}
 						else
 							break;
 					}
@@ -1505,7 +1528,7 @@ gboolean vtf_set_data()
 		gchar* identifier;
 		gboolean result;
 
-		identifier = vtf_get_data_id();
+		identifier = vtf_get_data_id(FALSE);
 		result = gimp_set_data(identifier, &layergroups.cur->VtfOpt, sizeof(VtfSaveOptions_t));
 
 		g_free(identifier);
@@ -1515,7 +1538,7 @@ gboolean vtf_set_data()
 			gint32	tattoo;
 			guint	data_size = sizeof(VtfSaveOptions_t);
 			
-			tattoo = vtf_get_data_tattoo();
+			tattoo = vtf_get_data_tattoo(TRUE);
 
 			fwrite(&tattoo,sizeof(gint32),1,settings);
 			fwrite(&data_size,sizeof(guint),1,settings);

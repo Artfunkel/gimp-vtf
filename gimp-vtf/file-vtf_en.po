@@ -21,7 +21,7 @@ msgstr "<b>Use layer as alpha channel:</b>"
 
 msgid "#layer_as_alpha_tip"
 msgstr "Override the final alpha channel with the contents of this layer.<small>\n\n"
-"<i>GIMP assumes that alpha is transparency and will happily destroy pixels it considers invisible. Separating the alpha channel into another layer bypasses this issue (and makes mask editing easier in general).</i></small>"
+"<i>GIMP assumes that alpha is transparency and will happily destroy pixels it considers invisible. Separating the alpha channel into another layer bypasses this issue and makes editing easier.</i></small>"
 
 msgid "#not_bump"
 msgstr "Not bump"

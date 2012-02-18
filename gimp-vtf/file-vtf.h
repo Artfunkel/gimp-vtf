@@ -30,9 +30,9 @@
 
 GimpParam	vtf_ret_values[4];
 
-static gint32		image_ID = -1;
-static GimpRunMode	run_mode = GIMP_RUN_INTERACTIVE;
-static gchar*		filename = 0;
+gint32		image_ID;
+GimpRunMode	run_mode;
+gchar*		filename;
 
 gchar* plugin_dir;
 gchar* plugin_locale_dir;
@@ -142,11 +142,5 @@ typedef struct VtfSaveOptions
 
 static const VtfSaveOptions_t DefaultSaveOptions = { TRUE, 4, FALSE, FALSE, TRUE, 0, FALSE, FALSE, TRUE, NOT_BUMP, VTF_MERGE_VISIBLE, 0, 0, 0, 0 };
 
-static const gchar* get_vtf_options_ID(gint32 tattoo)
-{
-	static gchar settings_ID[64];
-	snprintf(settings_ID,64,"%s_%i",SAVE_PROC,tattoo);
-	return settings_ID;
-}
-
+gchar* vtf_get_data_id(gboolean settings_file);
 #endif

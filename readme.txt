@@ -1,5 +1,5 @@
 GIMP VTF PLUG-IN 1.2
-Tom Edwards, 6th February 2012
+Tom Edwards, 17th February 2012
 *******************************
 
 To install, extract both the EXE and DLL to your
@@ -20,8 +20,10 @@ Changes
  * Upgraded to GIMP 2.7
  * Added 64-bit support
  * Now saves top-level layer groups to separate VTF
-   files. Store your albedos, bumps, masks, and
-   anything else in the same XCF!
+   files. Store albedos, bumps, masks, and anything
+   else in the same XCF!
+ * Export settings are now remembered after GIMP is
+   closed
  * Now writes I8/IA8 if the image is grayscale and the
    user wants an uncompressed format
  * Fixed non-localised layer names when loading
