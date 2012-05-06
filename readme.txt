@@ -1,10 +1,10 @@
 GIMP VTF PLUG-IN 1.2
-Tom Edwards, 17th February 2012
+Tom Edwards, 6th May 2012
 *******************************
 
 To install, extract both the EXE and DLL to your
 GIMP plug-ins folder. This is typically at 
-C:\Users\<USER>\.gimp-2.7\plug-ins\.
+C:\Users\<USER>\.gimp-2.8\plug-ins\.
 
 If you prefer, there is also a plug-ins folder in 
 your main GIMP installation. This is at 
@@ -17,7 +17,7 @@ Changes
 *******
 
 1.2
- * Upgraded to GIMP 2.7
+ * Upgraded to GIMP 2.8
  * Added 64-bit support
  * Now saves top-level layer groups to separate VTF
    files. Store albedos, bumps, masks, and anything

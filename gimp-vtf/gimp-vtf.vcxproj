@@ -86,7 +86,7 @@
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
-      <AdditionalIncludeDirectories>C:\Users\Tom\Documents\Visual Studio 2010\Libraries\vtflib132\lib;C:\gnu\gimp-2.7.4;C:\gnu\gtk+-2.24.8\include\glib-2.0;C:\gnu\gtk+-2.24.8\lib\glib-2.0\include;C:\gnu\gtk+-2.24.8\include;C:\gnu\gtk+-2.24.8\include\gtk-2.0;C:\gnu\gtk+-2.24.8\include\cairo;C:\gnu\gtk+-2.24.8\include\pango-1.0;C:\gnu\gtk+-2.24.8\lib\gtk-2.0\include;C:\gnu\gtk+-2.24.8\include\gdk-pixbuf-2.0;C:\gnu\gtk+-2.24.8\include\atk-1.0</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Users\Tom\Documents\Visual Studio 2010\Libraries\vtflib132\lib;C:\gnu\gimp-2.8.0;C:\gnu\gtk+-2.24.10\include\glib-2.0;C:\gnu\gtk+-2.24.10\lib\glib-2.0\include;C:\gnu\gtk+-2.24.10\include;C:\gnu\gtk+-2.24.10\include\gtk-2.0;C:\gnu\gtk+-2.24.10\include\cairo;C:\gnu\gtk+-2.24.10\include\pango-1.0;C:\gnu\gtk+-2.24.10\lib\gtk-2.0\include;C:\gnu\gtk+-2.24.10\include\gdk-pixbuf-2.0;C:\gnu\gtk+-2.24.10\include\atk-1.0</AdditionalIncludeDirectories>
       <CompileAs>CompileAsC</CompileAs>
       <PreprocessorDefinitions>_MBCS;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
@@ -98,8 +98,8 @@
       </AdditionalLibraryDirectories>
     </Link>
     <PostBuildEvent>
-      <Command>copy "$(TargetPath)" "$(USERPROFILE)\.gimp-2.7\plug-ins\"
-copy  "C:\Users\Tom\Documents\Visual Studio 2010\Libraries\vtflib132\bin\x86\vtflib.dll" "$(USERPROFILE)\.gimp-2.7\plug-ins\"</Command>
+      <Command>copy "$(TargetPath)" "$(USERPROFILE)\.gimp-2.8\plug-ins\"
+copy  "C:\Users\Tom\Documents\Visual Studio 2010\Libraries\vtflib132\bin\x86\vtflib.dll" "$(USERPROFILE)\.gimp-2.8\plug-ins\"</Command>
       <Message>Deploying...</Message>
     </PostBuildEvent>
     <PreBuildEvent>
@@ -110,7 +110,7 @@ copy  "C:\Users\Tom\Documents\Visual Studio 2010\Libraries\vtflib132\bin\x86\vtf
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
-      <AdditionalIncludeDirectories>C:\Users\Tom\Documents\Visual Studio 2010\Libraries\vtflib132\lib;C:\gnu\gimp-2.7.4;C:\gnu\gtk+-2.24.8\include\glib-2.0;C:\gnu\gtk+-2.24.8\lib\glib-2.0\include;C:\gnu\gtk+-2.24.8\include;C:\gnu\gtk+-2.24.8\include\gtk-2.0;C:\gnu\gtk+-2.24.8\include\cairo;C:\gnu\gtk+-2.24.8\include\pango-1.0;C:\gnu\gtk+-2.24.8\lib\gtk-2.0\include;C:\gnu\gtk+-2.24.8\include\gdk-pixbuf-2.0;C:\gnu\gtk+-2.24.8\include\atk-1.0</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Users\Tom\Documents\Visual Studio 2010\Libraries\vtflib132\lib;C:\gnu\gimp-2.8.0;C:\gnu\gtk+-2.24.10\include\glib-2.0;C:\gnu\gtk+-2.24.10\lib\glib-2.0\include;C:\gnu\gtk+-2.24.10\include;C:\gnu\gtk+-2.24.10\include\gtk-2.0;C:\gnu\gtk+-2.24.10\include\cairo;C:\gnu\gtk+-2.24.10\include\pango-1.0;C:\gnu\gtk+-2.24.10\lib\gtk-2.0\include;C:\gnu\gtk+-2.24.10\include\gdk-pixbuf-2.0;C:\gnu\gtk+-2.24.10\include\atk-1.0</AdditionalIncludeDirectories>
       <CompileAs>CompileAsC</CompileAs>
       <PreprocessorDefinitions>_MBCS;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
@@ -122,8 +122,8 @@ copy  "C:\Users\Tom\Documents\Visual Studio 2010\Libraries\vtflib132\bin\x86\vtf
       </AdditionalLibraryDirectories>
     </Link>
     <PostBuildEvent>
-      <Command>copy "$(TargetPath)" "$(USERPROFILE)\.gimp-2.7\plug-ins\"
-copy  "C:\Users\Tom\Documents\Visual Studio 2010\Libraries\vtflib132\bin\x64\vtflib.dll" "$(USERPROFILE)\.gimp-2.7\plug-ins\"</Command>
+      <Command>copy "$(TargetPath)" "$(USERPROFILE)\.gimp-2.8\plug-ins\"
+copy  "C:\Users\Tom\Documents\Visual Studio 2010\Libraries\vtflib132\bin\x64\vtflib.dll" "$(USERPROFILE)\.gimp-2.8\plug-ins\"</Command>
       <Message>Deploying...</Message>
     </PostBuildEvent>
     <PreBuildEvent>
@@ -136,7 +136,7 @@ copy  "C:\Users\Tom\Documents\Visual Studio 2010\Libraries\vtflib132\bin\x64\vtf
       <Optimization>MaxSpeed</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
-      <AdditionalIncludeDirectories>C:\Users\Tom\Documents\Visual Studio 2010\Libraries\vtflib132\lib;C:\gnu\gimp-2.7.4;C:\gnu\gtk+-2.24.8\include\glib-2.0;C:\gnu\gtk+-2.24.8\lib\glib-2.0\include;C:\gnu\gtk+-2.24.8\include;C:\gnu\gtk+-2.24.8\include\gtk-2.0;C:\gnu\gtk+-2.24.8\include\cairo;C:\gnu\gtk+-2.24.8\include\pango-1.0;C:\gnu\gtk+-2.24.8\lib\gtk-2.0\include;C:\gnu\gtk+-2.24.8\include\gdk-pixbuf-2.0;C:\gnu\gtk+-2.24.8\include\atk-1.0</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Users\Tom\Documents\Visual Studio 2010\Libraries\vtflib132\lib;C:\gnu\gimp-2.8.0;C:\gnu\gtk+-2.24.10\include\glib-2.0;C:\gnu\gtk+-2.24.10\lib\glib-2.0\include;C:\gnu\gtk+-2.24.10\include;C:\gnu\gtk+-2.24.10\include\gtk-2.0;C:\gnu\gtk+-2.24.10\include\cairo;C:\gnu\gtk+-2.24.10\include\pango-1.0;C:\gnu\gtk+-2.24.10\lib\gtk-2.0\include;C:\gnu\gtk+-2.24.10\include\gdk-pixbuf-2.0;C:\gnu\gtk+-2.24.10\include\atk-1.0</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>_MBCS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
     </ClCompile>
@@ -149,8 +149,8 @@ copy  "C:\Users\Tom\Documents\Visual Studio 2010\Libraries\vtflib132\bin\x64\vtf
       </AdditionalLibraryDirectories>
     </Link>
     <PostBuildEvent>
-      <Command>copy "$(TargetPath)" "$(USERPROFILE)\.gimp-2.7\plug-ins\"
-copy  "C:\Users\Tom\Documents\Visual Studio 2010\Libraries\vtflib132\bin\x86\vtflib.dll" "$(USERPROFILE)\.gimp-2.7\plug-ins\"</Command>
+      <Command>copy "$(TargetPath)" "$(USERPROFILE)\.gimp-2.8\plug-ins\"
+copy  "C:\Users\Tom\Documents\Visual Studio 2010\Libraries\vtflib132\bin\x86\vtflib.dll" "$(USERPROFILE)\.gimp-2.8\plug-ins\"</Command>
       <Message>Deploying...</Message>
     </PostBuildEvent>
     <PreBuildEvent>
@@ -164,7 +164,7 @@ copy  "C:\Users\Tom\Documents\Visual Studio 2010\Libraries\vtflib132\bin\x86\vtf
       <Optimization>MaxSpeed</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
-      <AdditionalIncludeDirectories>C:\Users\Tom\Documents\Visual Studio 2010\Libraries\vtflib132\lib;C:\gnu\gimp-2.7.4;C:\gnu\gtk+-2.24.8\include\glib-2.0;C:\gnu\gtk+-2.24.8\lib\glib-2.0\include;C:\gnu\gtk+-2.24.8\include;C:\gnu\gtk+-2.24.8\include\gtk-2.0;C:\gnu\gtk+-2.24.8\include\cairo;C:\gnu\gtk+-2.24.8\include\pango-1.0;C:\gnu\gtk+-2.24.8\lib\gtk-2.0\include;C:\gnu\gtk+-2.24.8\include\gdk-pixbuf-2.0;C:\gnu\gtk+-2.24.8\include\atk-1.0</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Users\Tom\Documents\Visual Studio 2010\Libraries\vtflib132\lib;C:\gnu\gimp-2.8.0;C:\gnu\gtk+-2.24.10\include\glib-2.0;C:\gnu\gtk+-2.24.10\lib\glib-2.0\include;C:\gnu\gtk+-2.24.10\include;C:\gnu\gtk+-2.24.10\include\gtk-2.0;C:\gnu\gtk+-2.24.10\include\cairo;C:\gnu\gtk+-2.24.10\include\pango-1.0;C:\gnu\gtk+-2.24.10\lib\gtk-2.0\include;C:\gnu\gtk+-2.24.10\include\gdk-pixbuf-2.0;C:\gnu\gtk+-2.24.10\include\atk-1.0</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>_MBCS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
     </ClCompile>
@@ -177,8 +177,8 @@ copy  "C:\Users\Tom\Documents\Visual Studio 2010\Libraries\vtflib132\bin\x86\vtf
       </AdditionalLibraryDirectories>
     </Link>
     <PostBuildEvent>
-      <Command>copy "$(TargetPath)" "$(USERPROFILE)\.gimp-2.7\plug-ins\"
-copy  "C:\Users\Tom\Documents\Visual Studio 2010\Libraries\vtflib132\bin\x64\vtflib.dll" "$(USERPROFILE)\.gimp-2.7\plug-ins\"</Command>
+      <Command>copy "$(TargetPath)" "$(USERPROFILE)\.gimp-2.8\plug-ins\"
+copy  "C:\Users\Tom\Documents\Visual Studio 2010\Libraries\vtflib132\bin\x64\vtflib.dll" "$(USERPROFILE)\.gimp-2.8\plug-ins\"</Command>
       <Message>Deploying...</Message>
     </PostBuildEvent>
     <PreBuildEvent>
