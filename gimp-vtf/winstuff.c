@@ -79,7 +79,7 @@ void register_filetype()
 					REG_OPTION_NON_VOLATILE,
 					KEY_SET_VALUE, NULL,
 					&key, NULL);
-	RegSetKeyValue(key,NULL,NULL,REG_SZ,type_name,(DWORD)strlen(type_name));
+	RegSetValueEx(key,0,0,REG_SZ,(BYTE*)type_name,(DWORD)strlen(type_name)+1);
 	RegCloseKey(key);
 
 	RegCreateKeyEx(HKEY_CURRENT_USER,
@@ -87,14 +87,14 @@ void register_filetype()
 					REG_OPTION_NON_VOLATILE,
 					KEY_SET_VALUE|KEY_CREATE_SUB_KEY, NULL,
 					&key, NULL);
-	RegSetKeyValue(key,NULL,NULL,REG_SZ,type_desc,(DWORD)strlen(type_desc));
+	RegSetValueEx(key,0,0,REG_SZ,(BYTE*)type_desc,(DWORD)strlen(type_desc)+1);
 
 	RegCreateKeyEx(key,
 					"DefaultIcon", 0,NULL,
 					REG_OPTION_NON_VOLATILE,
 					KEY_SET_VALUE, NULL,
 					&subkey, NULL);
-	RegSetKeyValue(subkey,NULL,NULL,REG_SZ,icon_path,(DWORD)strlen(icon_path));
+	RegSetValueEx(key,0,0,REG_SZ,(BYTE*)icon_path,(DWORD)strlen(icon_path)+1);
 	RegCloseKey(key);
 	RegCloseKey(subkey);
 }

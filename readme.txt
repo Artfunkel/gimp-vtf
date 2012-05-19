@@ -1,5 +1,5 @@
-GIMP VTF PLUG-IN 1.2
-Tom Edwards, 6th May 2012
+GIMP VTF PLUG-IN 1.2.1
+Tom Edwards, 19th May 2012
 *******************************
 
 To install, extract both the EXE and DLL to your
@@ -15,6 +15,9 @@ source code visit <http://code.google.com/p/gimp-vtf/>.
 
 Changes
 *******
+
+1.2.1
+ * Fixed errors on Windows XP
 
 1.2
  * Upgraded to GIMP 2.8
