@@ -137,7 +137,7 @@ void load(gint nparams, const GimpParam* param, gint* nreturn_vals, gboolean thu
 							if ( single )
 							{
 								textdomain(""); // reset to GIMP default to get the localised name
-								strcpy_s(layer_name_buf,sizeof(layer_name_buf),_("Background"));
+								strcpy(layer_name_buf,_("Background"));
 								textdomain(TEXT_DOMAIN);
 							}
 							else

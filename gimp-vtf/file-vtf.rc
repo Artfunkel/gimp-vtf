@@ -20,7 +20,7 @@ LANGUAGE LANG_NEUTRAL, SUBLANG_NEUTRAL
 		{
 			VALUE "Comments", "Adds Valve Texture Format support to the GIMP"
 			VALUE "FileDescription", "GIMP VTF plugin"
-			VALUE "FileVersion", "1.231"
+			VALUE "FileVersion", "1.2.1"
 			VALUE "InternalName", "file-vtf"
 			VALUE "OriginalFilename", "file-vtf.exe"
 			VALUE "ProductName", "GIMP"

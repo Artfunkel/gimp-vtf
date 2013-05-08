@@ -1479,7 +1479,7 @@ gboolean vtf_get_data()
 					
 					if ( candidate_tattoo == vtf_get_data_tattoo(TRUE) )
 					{
-						result = (gboolean)fread(&layergroups.cur->VtfOpt,min(data_size,sizeof(VtfSaveOptions_t)),1,settings);
+						result = (gboolean)fread(&layergroups.cur->VtfOpt,MIN(data_size,sizeof(VtfSaveOptions_t)),1,settings);
 						break;
 					}
 					else
