@@ -21,12 +21,6 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <Library Include="..\..\..\Libraries\vtflib132\lib\x86\VTFLib.lib">
-      <Filter>Lib</Filter>
-    </Library>
-    <Library Include="..\..\..\Libraries\vtflib132\lib\x64\VTFLib.lib">
-      <Filter>Lib64</Filter>
-    </Library>
     <Library Include="..\lib64\libgimpui-2.0-0.lib">
       <Filter>Lib64</Filter>
     </Library>
@@ -75,6 +69,12 @@
     <Library Include="..\libs\libgimpbase-2.0-0.lib">
       <Filter>Lib</Filter>
     </Library>
+    <Library Include="$(VtfLib)\lib\x64\VTFLib.lib">
+      <Filter>Lib64</Filter>
+    </Library>
+    <Library Include="$(VtfLib)\lib\x86\VTFLib.lib">
+      <Filter>Lib</Filter>
+    </Library>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="file-vtf.c">
@@ -110,5 +110,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="..\readme.txt" />
+    <None Include="gimp-vtf.props" />
   </ItemGroup>
 </Project>

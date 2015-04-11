@@ -1,0 +1,11 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!-- Edit this file to locate the various build dependencies. It's ignored by Git. -->
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ImportGroup Label="PropertySheets" />
+  <PropertyGroup Label="UserMacros">
+    <GnuGtkPlus>F:\gnu\gtk+-2.24.10\</GnuGtkPlus>
+    <GnuGimp>F:\gnu\gimp-2.8.10\</GnuGimp>
+    <GnuGetText>F:\gnu\gettext\</GnuGetText>
+    <VtfLib>F:\Users\Tom\Documents\Visual Studio 2010\Libraries\vtflib132\</VtfLib>
+  </PropertyGroup>
+</Project>

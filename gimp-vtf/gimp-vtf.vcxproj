@@ -28,42 +28,46 @@
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <CharacterSet>MultiByte</CharacterSet>
-    <PlatformToolset>Windows7.1SDK</PlatformToolset>
+    <PlatformToolset>v120_xp</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <CharacterSet>MultiByte</CharacterSet>
-    <PlatformToolset>Windows7.1SDK</PlatformToolset>
+    <PlatformToolset>v120_xp</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>MultiByte</CharacterSet>
-    <PlatformToolset>Windows7.1SDK</PlatformToolset>
+    <PlatformToolset>v120_xp</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>MultiByte</CharacterSet>
-    <PlatformToolset>Windows7.1SDK</PlatformToolset>
+    <PlatformToolset>v120_xp</PlatformToolset>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <ImportGroup Label="ExtensionSettings">
   </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="gimp-vtf.props" />
   </ImportGroup>
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="gimp-vtf.props" />
   </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="gimp-vtf.props" />
   </ImportGroup>
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="gimp-vtf.props" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
@@ -86,7 +90,7 @@
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
-      <AdditionalIncludeDirectories>C:\Users\Tom\Documents\Visual Studio 2010\Libraries\vtflib132\lib;C:\gnu\gimp-2.8.0;C:\gnu\gtk+-2.24.10\include\glib-2.0;C:\gnu\gtk+-2.24.10\lib\glib-2.0\include;C:\gnu\gtk+-2.24.10\include;C:\gnu\gtk+-2.24.10\include\gtk-2.0;C:\gnu\gtk+-2.24.10\include\cairo;C:\gnu\gtk+-2.24.10\include\pango-1.0;C:\gnu\gtk+-2.24.10\lib\gtk-2.0\include;C:\gnu\gtk+-2.24.10\include\gdk-pixbuf-2.0;C:\gnu\gtk+-2.24.10\include\atk-1.0</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(VtfLib)\lib;$(GnuGimp);$(GnuGtkPlus)\include\glib-2.0;$(GnuGtkPlus)\lib\glib-2.0\include;$(GnuGtkPlus)\include;$(GnuGtkPlus)\include\gtk-2.0;$(GnuGtkPlus)\include\cairo;$(GnuGtkPlus)\include\pango-1.0;$(GnuGtkPlus)\lib\gtk-2.0\include;$(GnuGtkPlus)\include\gdk-pixbuf-2.0;$(GnuGtkPlus)\include\atk-1.0</AdditionalIncludeDirectories>
       <CompileAs>CompileAsC</CompileAs>
       <PreprocessorDefinitions>_MBCS;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
@@ -99,18 +103,18 @@
     </Link>
     <PostBuildEvent>
       <Command>copy "$(TargetPath)" "$(USERPROFILE)\.gimp-2.8\plug-ins\"
-copy  "C:\Users\Tom\Documents\Visual Studio 2010\Libraries\vtflib132\bin\x86\vtflib.dll" "$(USERPROFILE)\.gimp-2.8\plug-ins\"</Command>
+copy  "$(VtfLib)bin\x86\vtflib.dll" "$(USERPROFILE)\.gimp-2.8\plug-ins\"</Command>
       <Message>Deploying...</Message>
     </PostBuildEvent>
     <PreBuildEvent>
-      <Command>C:\gnu\gettext\bin\msgconv.exe -D "$(ProjectDir)"</Command>
+      <Command>$(GnuGetText)bin\msgconv.exe -D "$(ProjectDir)"</Command>
     </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
-      <AdditionalIncludeDirectories>C:\Users\Tom\Documents\Visual Studio 2010\Libraries\vtflib132\lib;C:\gnu\gimp-2.8.0;C:\gnu\gtk+-2.24.10\include\glib-2.0;C:\gnu\gtk+-2.24.10\lib\glib-2.0\include;C:\gnu\gtk+-2.24.10\include;C:\gnu\gtk+-2.24.10\include\gtk-2.0;C:\gnu\gtk+-2.24.10\include\cairo;C:\gnu\gtk+-2.24.10\include\pango-1.0;C:\gnu\gtk+-2.24.10\lib\gtk-2.0\include;C:\gnu\gtk+-2.24.10\include\gdk-pixbuf-2.0;C:\gnu\gtk+-2.24.10\include\atk-1.0</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(VtfLib)\lib;$(GnuGimp);$(GnuGtkPlus)\include\glib-2.0;$(GnuGtkPlus)\lib\glib-2.0\include;$(GnuGtkPlus)\include;$(GnuGtkPlus)\include\gtk-2.0;$(GnuGtkPlus)\include\cairo;$(GnuGtkPlus)\include\pango-1.0;$(GnuGtkPlus)\lib\gtk-2.0\include;$(GnuGtkPlus)\include\gdk-pixbuf-2.0;$(GnuGtkPlus)\include\atk-1.0</AdditionalIncludeDirectories>
       <CompileAs>CompileAsC</CompileAs>
       <PreprocessorDefinitions>_MBCS;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
@@ -123,11 +127,11 @@ copy  "C:\Users\Tom\Documents\Visual Studio 2010\Libraries\vtflib132\bin\x86\vtf
     </Link>
     <PostBuildEvent>
       <Command>copy "$(TargetPath)" "$(USERPROFILE)\.gimp-2.8\plug-ins\"
-copy  "C:\Users\Tom\Documents\Visual Studio 2010\Libraries\vtflib132\bin\x64\vtflib.dll" "$(USERPROFILE)\.gimp-2.8\plug-ins\"</Command>
+copy  "$(VtfLib)bin\x64\vtflib.dll" "$(USERPROFILE)\.gimp-2.8\plug-ins\"</Command>
       <Message>Deploying...</Message>
     </PostBuildEvent>
     <PreBuildEvent>
-      <Command>C:\gnu\gettext\bin\msgconv.exe -D "$(ProjectDir)"</Command>
+      <Command>$(GnuGetText)bin\msgconv.exe -D "$(ProjectDir)"</Command>
     </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -136,7 +140,7 @@ copy  "C:\Users\Tom\Documents\Visual Studio 2010\Libraries\vtflib132\bin\x64\vtf
       <Optimization>MaxSpeed</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
-      <AdditionalIncludeDirectories>C:\Users\Tom\Documents\Visual Studio 2010\Libraries\vtflib132\lib;C:\gnu\gimp-2.8.0;C:\gnu\gtk+-2.24.10\include\glib-2.0;C:\gnu\gtk+-2.24.10\lib\glib-2.0\include;C:\gnu\gtk+-2.24.10\include;C:\gnu\gtk+-2.24.10\include\gtk-2.0;C:\gnu\gtk+-2.24.10\include\cairo;C:\gnu\gtk+-2.24.10\include\pango-1.0;C:\gnu\gtk+-2.24.10\lib\gtk-2.0\include;C:\gnu\gtk+-2.24.10\include\gdk-pixbuf-2.0;C:\gnu\gtk+-2.24.10\include\atk-1.0</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(VtfLib)\lib;$(GnuGimp);$(GnuGtkPlus)\include\glib-2.0;$(GnuGtkPlus)\lib\glib-2.0\include;$(GnuGtkPlus)\include;$(GnuGtkPlus)\include\gtk-2.0;$(GnuGtkPlus)\include\cairo;$(GnuGtkPlus)\include\pango-1.0;$(GnuGtkPlus)\lib\gtk-2.0\include;$(GnuGtkPlus)\include\gdk-pixbuf-2.0;$(GnuGtkPlus)\include\atk-1.0</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>_MBCS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
     </ClCompile>
@@ -150,7 +154,7 @@ copy  "C:\Users\Tom\Documents\Visual Studio 2010\Libraries\vtflib132\bin\x64\vtf
     </Link>
     <PostBuildEvent>
       <Command>copy "$(TargetPath)" "$(USERPROFILE)\.gimp-2.8\plug-ins\"
-copy  "C:\Users\Tom\Documents\Visual Studio 2010\Libraries\vtflib132\bin\x86\vtflib.dll" "$(USERPROFILE)\.gimp-2.8\plug-ins\"</Command>
+copy  "$(VtfLib)bin\x86\vtflib.dll" "$(USERPROFILE)\.gimp-2.8\plug-ins\"</Command>
       <Message>Deploying...</Message>
     </PostBuildEvent>
     <PreBuildEvent>
@@ -164,7 +168,7 @@ copy  "C:\Users\Tom\Documents\Visual Studio 2010\Libraries\vtflib132\bin\x86\vtf
       <Optimization>MaxSpeed</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
-      <AdditionalIncludeDirectories>C:\Users\Tom\Documents\Visual Studio 2010\Libraries\vtflib132\lib;C:\gnu\gimp-2.8.0;C:\gnu\gtk+-2.24.10\include\glib-2.0;C:\gnu\gtk+-2.24.10\lib\glib-2.0\include;C:\gnu\gtk+-2.24.10\include;C:\gnu\gtk+-2.24.10\include\gtk-2.0;C:\gnu\gtk+-2.24.10\include\cairo;C:\gnu\gtk+-2.24.10\include\pango-1.0;C:\gnu\gtk+-2.24.10\lib\gtk-2.0\include;C:\gnu\gtk+-2.24.10\include\gdk-pixbuf-2.0;C:\gnu\gtk+-2.24.10\include\atk-1.0</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(VtfLib)\lib;$(GnuGimp);$(GnuGtkPlus)\include\glib-2.0;$(GnuGtkPlus)\lib\glib-2.0\include;$(GnuGtkPlus)\include;$(GnuGtkPlus)\include\gtk-2.0;$(GnuGtkPlus)\include\cairo;$(GnuGtkPlus)\include\pango-1.0;$(GnuGtkPlus)\lib\gtk-2.0\include;$(GnuGtkPlus)\include\gdk-pixbuf-2.0;$(GnuGtkPlus)\include\atk-1.0</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>_MBCS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
     </ClCompile>
@@ -178,7 +182,7 @@ copy  "C:\Users\Tom\Documents\Visual Studio 2010\Libraries\vtflib132\bin\x86\vtf
     </Link>
     <PostBuildEvent>
       <Command>copy "$(TargetPath)" "$(USERPROFILE)\.gimp-2.8\plug-ins\"
-copy  "C:\Users\Tom\Documents\Visual Studio 2010\Libraries\vtflib132\bin\x64\vtflib.dll" "$(USERPROFILE)\.gimp-2.8\plug-ins\"</Command>
+copy  "$(VtfLib)bin\x64\vtflib.dll" "$(USERPROFILE)\.gimp-2.8\plug-ins\"</Command>
       <Message>Deploying...</Message>
     </PostBuildEvent>
     <PreBuildEvent>
@@ -193,11 +197,11 @@ copy  "C:\Users\Tom\Documents\Visual Studio 2010\Libraries\vtflib132\bin\x64\vtf
     <ClCompile Include="winstuff.c" />
   </ItemGroup>
   <ItemGroup>
-    <Library Include="..\..\..\Libraries\vtflib132\lib\x64\VTFLib.lib">
+    <Library Include="$(VtfLib)\lib\x64\VTFLib.lib">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
     </Library>
-    <Library Include="..\..\..\Libraries\vtflib132\lib\x86\VTFLib.lib">
+    <Library Include="$(VtfLib)\lib\x86\VTFLib.lib">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
     </Library>
@@ -276,14 +280,14 @@ copy  "C:\Users\Tom\Documents\Visual Studio 2010\Libraries\vtflib132\bin\x64\vtf
   <ItemGroup>
     <CustomBuild Include="file-vtf_en.po">
       <FileType>Document</FileType>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">C:\gnu\gettext\bin\msgfmt.exe "%(FullPath)" -o "$(ProjectDir)%(Filename).mo"</Command>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">C:\gnu\gettext\bin\msgfmt.exe "%(FullPath)" -o "$(ProjectDir)%(Filename).mo"</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(GnuGetText)bin\msgfmt.exe "%(FullPath)" -o "$(ProjectDir)%(Filename).mo"</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(GnuGetText)bin\msgfmt.exe "%(FullPath)" -o "$(ProjectDir)%(Filename).mo"</Command>
       <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Compiling translation data "%(Identity)"</Message>
       <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Compiling translation data "%(Identity)"</Message>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(ProjectDir)%(Filename).mo;%(Outputs)</Outputs>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(ProjectDir)%(Filename).mo;%(Outputs)</Outputs>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">C:\gnu\gettext\bin\msgfmt.exe "%(FullPath)" -o "$(ProjectDir)%(Filename).mo"</Command>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">C:\gnu\gettext\bin\msgfmt.exe "%(FullPath)" -o "$(ProjectDir)%(Filename).mo"</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(GnuGetText)bin\msgfmt.exe "%(FullPath)" -o "$(ProjectDir)%(Filename).mo"</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(GnuGetText)bin\msgfmt.exe "%(FullPath)" -o "$(ProjectDir)%(Filename).mo"</Command>
       <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Compiling translation data "%(Identity)"</Message>
       <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Compiling translation data "%(Identity)"</Message>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(ProjectDir)%(Filename).mo;%(Outputs)</Outputs>
@@ -292,6 +296,7 @@ copy  "C:\Users\Tom\Documents\Visual Studio 2010\Libraries\vtflib132\bin\x64\vtf
   </ItemGroup>
   <ItemGroup>
     <None Include="..\readme.txt" />
+    <None Include="gimp-vtf.props" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
